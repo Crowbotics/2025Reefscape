@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 public final class Constants {
   public static final class DriveConstants {
     public static final double TEST = 0.0;
-    
+
     public static final int kFrontLeftDriveMotorPort = 1;
     public static final int kRearLeftDriveMotorPort = 3;
     public static final int kFrontRightDriveMotorPort = 5;
@@ -38,7 +38,7 @@ public final class Constants {
 
     // If you call DriveSubsystem.drive() with a different period make sure to update this.
     public static final double kDrivePeriod = TimedRobot.kDefaultPeriod;
-
+    public static final int hi = 1;
     public static final double kTrackWidth = 0.548;
     // Distance between centers of right and left wheels on robot
     public static final double kWheelBase = 0.548;
