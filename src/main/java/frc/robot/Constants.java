@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
  */
 public final class Constants {
   public static final class DriveConstants {
-it 
+    
     public static final String message = "Lofty's variables are the best!";
 
     public static final int kFrontLeftDriveMotorPort = 1;
