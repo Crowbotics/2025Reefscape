@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
  */
 public final class Constants {
   public static final class DriveConstants {
+    public static final double TEST = 0.0;
+    
     public static final int kFrontLeftDriveMotorPort = 1;
     public static final int kRearLeftDriveMotorPort = 3;
     public static final int kFrontRightDriveMotorPort = 5;
