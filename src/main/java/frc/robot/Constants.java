@@ -89,7 +89,7 @@ public final class Constants {
     public static final double kDModuleTurningController = 0.001;
 
     //PID Values for individial module DRIVE motors
-    public static final double kPModuleDriveController = .125;
+    public static final double kPModuleDriveController = 1;
     public static final double kIModuleDriveController = 0;
     public static final double kDModuleDriveController = 0.001;
 
