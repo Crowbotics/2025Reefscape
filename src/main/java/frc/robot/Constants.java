@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
  */
 public final class Constants {
   public static final class DriveConstants {
-    
+
     public static final String message = "Lofty's variables are the best!";
 
     public static final int kFrontLeftDriveMotorPort = 1;
@@ -36,6 +36,11 @@ public final class Constants {
     public static final int kRearLeftTurningEncoderPort = 24;
     public static final int kFrontRightTurningEncoderPort = 26;
     public static final int kRearRightTurningEncoderPort = 28;
+
+    public static final double kFrontLetftOffset = -0.361572;
+    public static final double kRearLetftOffset = -0.087646;
+    public static final double kFrontRightOffset = -0.315186;
+    public static final double kRearRightOffset = -0.496094;
 
     // If you call DriveSubsystem.drive() with a different period make sure to update this.
     public static final double kDrivePeriod = TimedRobot.kDefaultPeriod;
