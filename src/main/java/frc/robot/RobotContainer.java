@@ -50,11 +50,11 @@ public class RobotContainer {
                     // Multiply by max speed to map the joystick unitless inputs to actual units.
                     // This will map the [-1, 1] to [max speed backwards, max speed forwards],
                     // converting them to actual units.
-                    -MathUtil.applyDeadband(m_driverController.getRawAxis(1), 0.05) 
+                    -MathUtil.applyDeadband(m_driverController.getRawAxis(1), 0.075) 
                         * DriveConstants.kMaxSpeedMetersPerSecond,
-                    -MathUtil.applyDeadband(m_driverController.getRawAxis(0), 0.05) 
+                    -MathUtil.applyDeadband(m_driverController.getRawAxis(0), 0.075) 
                         * DriveConstants.kMaxSpeedMetersPerSecond,
-                    -MathUtil.applyDeadband(m_driverController.getRawAxis(4), 0.05)
+                    -MathUtil.applyDeadband(m_driverController.getRawAxis(4), 0.075)
                         * ModuleConstants.kMaxModuleAngularSpeedRadiansPerSecond,
                     true),
             m_robotDrive));
@@ -69,6 +69,14 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling passing it to a
    * {@link JoystickButton}.
    */
+
+   private double kSlowmoMultiplier = 1;
+
+   public void slowmo () { kSlowmoMultiplier = 0.4;}
+
+   
+
+
   private void configureButtonBindings() 
   {
     JoystickButton aButton = new JoystickButton(m_driverController, 1);
@@ -76,7 +84,12 @@ public class RobotContainer {
 
     JoystickButton bButton = new JoystickButton(m_driverController, 2);
     new Trigger(bButton.onTrue(new RunCommand(m_robotDrive::resetPose, m_robotDrive)).onFalse(m_robotDrive.getDefaultCommand()));
+/* 
+    JoystickButton rbButton = new JoystickButton(m_driverController, 5);
+    new trigger (rbButton.onTrue( ()))*/
   }
+
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

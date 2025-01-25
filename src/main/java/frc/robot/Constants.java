@@ -41,6 +41,8 @@ public final class Constants {
     public static final double kRearLetftOffset = -0.087646;
     public static final double kFrontRightOffset = -0.315186;
     public static final double kRearRightOffset = -0.496094;
+    
+
 
     // If you call DriveSubsystem.drive() with a different period make sure to update this.
     public static final double kDrivePeriod = TimedRobot.kDefaultPeriod;
@@ -65,11 +67,11 @@ public final class Constants {
     public static final double kvVoltSecondsPerMeter = 0.8;
     public static final double kaVoltSecondsSquaredPerMeter = 0.15;
 
-    public static final double kMaxSpeedMetersPerSecond = 10;
+    public static final double kMaxSpeedMetersPerSecond = 3;
   }
 
   public static final class ModuleConstants {
-    public static final double kMaxModuleAngularSpeedRadiansPerSecond = 4 * Math.PI;
+    public static final double kMaxModuleAngularSpeedRadiansPerSecond = 2 * Math.PI;
     public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 4 * Math.PI;
 
     public static final int kEncoderCPR = 1024*4;
@@ -94,8 +96,8 @@ public final class Constants {
     public static final double kDModuleTurningController = 0.001;
 
     //PID Values for individial module DRIVE motors
-    public static final double kPModuleDriveController = .1;
-    public static final double kIModuleDriveController = 0;
+    public static final double kPModuleDriveController = .25;
+    public static final double kIModuleDriveController = 1.5;
     public static final double kDModuleDriveController = 0;
 
   }
