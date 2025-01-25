@@ -84,14 +84,14 @@ public final class Constants {
   public static final class PIDConstants {
 
     //PID Values for individial module TURN motors
-    public static final double kPModuleTurningController = .45;
+    public static final double kPModuleTurningController = 0.45;
     public static final double kIModuleTurningController = 0;
     public static final double kDModuleTurningController = 0.001;
 
     //PID Values for individial module DRIVE motors
-    public static final double kPModuleDriveController = 1;
+    public static final double kPModuleDriveController = .1;
     public static final double kIModuleDriveController = 0;
-    public static final double kDModuleDriveController = 0.001;
+    public static final double kDModuleDriveController = 0;
 
   }
 
