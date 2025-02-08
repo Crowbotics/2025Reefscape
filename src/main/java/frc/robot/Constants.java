@@ -20,8 +20,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 public final class Constants {
   public static final class DriveConstants {
 
-    public static final String message = "Lofty's variables are the best!";
-
     public static final int kFrontLeftDriveMotorPort = 1;
     public static final int kRearLeftDriveMotorPort = 3;
     public static final int kFrontRightDriveMotorPort = 5;
@@ -37,17 +35,21 @@ public final class Constants {
     public static final int kFrontRightTurningEncoderPort = 26;
     public static final int kRearRightTurningEncoderPort = 28;
 
-    public static final double kFrontLetftOffset = -0.361572;
-    public static final double kRearLetftOffset = -0.087646;
-    public static final double kFrontRightOffset = -0.315186;
-    public static final double kRearRightOffset = -0.496094;
+    public static final double kFrontLetftOffset = -0.246826; //old: -0.361572;
+    public static final double kRearLetftOffset = 0.377930;  //old: -0.087646;
+    public static final double kFrontRightOffset = 0.346436; //old: -0.315186;
+    public static final double kRearRightOffset = 0.215332;  //old: -0.496094;
 
     // If you call DriveSubsystem.drive() with a different period make sure to update this.
     public static final double kDrivePeriod = TimedRobot.kDefaultPeriod;
-    public static final double kTrackWidth = 0.548;
+
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = 0.548;
+    public static final double kTrackWidth = 0.483;
+ 
     // Distance between front and back wheels on robot
+    public static final double kWheelBase = 0.381;
+    
+
     public static final SwerveDriveKinematics kDriveKinematics =
         new SwerveDriveKinematics(
             new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -72,13 +74,23 @@ public final class Constants {
     public static final double kMaxModuleAngularSpeedRadiansPerSecond = 4 * Math.PI;
     public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 4 * Math.PI;
 
-    public static final int kEncoderCPR = 1024*4;
+    //public static final int kEncoderCPR = 1024*4;
     public static final double kWheelDiameterMeters = 0.0827;
-    public static final double kDriveGearRatio = 5.96;
+    public static final double kDriveGearRatio = 7.13;
     public static final double kDriveEncoderDistancePerPulse = (kWheelDiameterMeters * Math.PI) / kDriveGearRatio;
 
     public static final double kTurningGearRatio = 12.8;
     public static final double kTurningEncoderDistancePerPulse = 2*Math.PI / kTurningGearRatio;
+
+    //PID Values for individial module TURN motors
+    public static final double kPModuleTurningController = 0.45;
+    public static final double kIModuleTurningController = 0;
+    public static final double kDModuleTurningController = 0.001;
+    
+    //PID Values for individial module DRIVE motors
+    public static final double kPModuleDriveController = .1;
+    public static final double kIModuleDriveController = 0;
+    public static final double kDModuleDriveController = 0;
   }
 
   public static final class OIConstants {
@@ -86,17 +98,40 @@ public final class Constants {
     public static final int kAuxControllerPort = 1;
   }
 
-  public static final class PIDConstants {
 
-    //PID Values for individial module TURN motors
-    public static final double kPModuleTurningController = 0.45;
-    public static final double kIModuleTurningController = 0;
-    public static final double kDModuleTurningController = 0.001;
+  public static final class ArmConstants {
+    public static final int kArmPort1 = 9;
+    public static final int kArmPort2 = 10;
 
-    //PID Values for individial module DRIVE motors
-    public static final double kPModuleDriveController = .1;
-    public static final double kIModuleDriveController = 0;
-    public static final double kDModuleDriveController = 0;
+    public static final double kGroundFront = 0.0784;
+    public static final double kL2Front     = 0.375;
+    public static final double kStraightUp  = 0.50;
+    public static final double kL2Rear      = 0.625;
+    public static final double kGroundRear  = 0.9216;
+
+    public static final double kP = 10;
+    public static final double kI = 0;
+    public static final double kD = 0;
+  }
+
+  public static final class ClawConstants {
+    public static final int kTopPort = 11;
+    public static final int kBottomPort = 12;
+    public static final int kLeftPort = 13;
+    public static final int kRightPort = 14;
+    public static final int kKickerPort = 15;
+
+    public static final int kCoralSensor0 = 0;
+    public static final int kCoralSensor1 = 1;
+    public static final int kCoralSensor2 = 2;
+    public static final int kCoralSensor3 = 3;
+
+    public static final double kCollectorSpeed = 1;
+    public static final double kReverseCollectorSpeed = -1;
+  }
+
+  public static final class ClimberConstants {
+    public static final int kWinchPort = 16;
 
   }
 

@@ -12,8 +12,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -31,9 +33,11 @@ public class RobotContainer {
 
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final ArmSubsystem m_arm = new ArmSubsystem();
 
   // The driver's controller
   Joystick m_driverController = new Joystick(OIConstants.kDriverControllerPort);
+  Joystick m_auxController = new Joystick(OIConstants.kAuxControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -59,6 +63,8 @@ public class RobotContainer {
                     true),
             m_robotDrive));
 
+    m_arm.setDefaultCommand(new RunCommand(m_arm::setArmPosition, m_arm));
+
                 // Configure the button bindings
     configureButtonBindings();
   }
@@ -71,11 +77,33 @@ public class RobotContainer {
    */
   private void configureButtonBindings() 
   {
-    JoystickButton aButton = new JoystickButton(m_driverController, 1);
-    new Trigger(aButton.onTrue(new RunCommand(m_robotDrive::zeroHeading , m_robotDrive)).onFalse(m_robotDrive.getDefaultCommand()));
+    JoystickButton driverA = new JoystickButton(m_driverController, 1);
+    JoystickButton driverB = new JoystickButton(m_driverController, 2);
+    JoystickButton driverX = new JoystickButton(m_driverController, 3);
+    JoystickButton driverY = new JoystickButton(m_driverController, 4);
+    JoystickButton driverLB = new JoystickButton(m_driverController, 5);
+    JoystickButton driverRB = new JoystickButton(m_driverController,6);
+    JoystickButton driverSelect = new JoystickButton(m_driverController,7);
+    JoystickButton driverStart = new JoystickButton(m_driverController, 8);
+    JoystickButton driverLS = new JoystickButton(m_driverController,9);
+    JoystickButton driverRS = new JoystickButton(m_driverController,10);
 
-    JoystickButton bButton = new JoystickButton(m_driverController, 2);
-    new Trigger(bButton.onTrue(new RunCommand(m_robotDrive::resetPose, m_robotDrive)).onFalse(m_robotDrive.getDefaultCommand()));
+    JoystickButton auxA = new JoystickButton(m_auxController, 1);
+    JoystickButton auxB = new JoystickButton(m_auxController, 2);
+    JoystickButton auxX = new JoystickButton(m_auxController, 3);
+    JoystickButton auxY = new JoystickButton(m_auxController, 4);
+    JoystickButton auxLB = new JoystickButton(m_auxController, 5);
+    JoystickButton auxRB = new JoystickButton(m_auxController,6);
+    JoystickButton auxSelect = new JoystickButton(m_auxController,7);
+    JoystickButton auxStart = new JoystickButton(m_auxController, 8);
+    JoystickButton auxLS = new JoystickButton(m_auxController,9);
+    JoystickButton auxRS = new JoystickButton(m_auxController,10);
+
+    new Trigger(driverA.onTrue(Commands.runOnce(m_robotDrive::zeroHeading , m_robotDrive)));
+    new Trigger(driverB.onTrue(Commands.runOnce(m_robotDrive::resetPose, m_robotDrive)));
+
+    new Trigger(driverLB.onTrue(Commands.runOnce(m_arm::moveArmForward, m_arm)));
+    new Trigger(driverRB.onTrue(Commands.runOnce(m_arm::moveArmBackward, m_arm)));
   }
 
   /**
@@ -84,59 +112,9 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-
     return m_chooser.getSelected();
-    
   }
 }
 
-/**
- * 
- * // Create config for trajectory
-    TrajectoryConfig config =
-        new TrajectoryConfig(
-                AutoConstants.kMaxSpeedMetersPerSecond,
-                AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-            // Add kinematics to ensure max speed is actually obeyed
-            .setKinematics(DriveConstants.kDriveKinematics);
-
-    // An example trajectory to follow. All units in meters.
-    Trajectory exampleTrajectory =
-        TrajectoryGenerator.generateTrajectory(
-            // Start at the origin facing the +X direction
-            Pose2d.kZero,
-            // Pass through these two interior waypoints, making an 's' curve path
-            List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-            // End 3 meters straight ahead of where we started, facing forward
-            new Pose2d(3, 0, Rotation2d.kZero),
-            config);
-
-    var thetaController =
-        new ProfiledPIDController(
-            AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-    thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-    SwerveControllerCommand swerveControllerCommand =
-        new SwerveControllerCommand(
-            exampleTrajectory,
-            m_robotDrive::getPose, // Functional interface to feed supplier
-            DriveConstants.kDriveKinematics,
-
-            // Position controllers
-            new PIDController(AutoConstants.kPXController, 0, 0),
-            new PIDController(AutoConstants.kPYController, 0, 0),
-            thetaController,
-            m_robotDrive::setModuleStates,
-            m_robotDrive);
-
-    // Reset odometry to the initial pose of the trajectory, run path following
-    // command, then stop at the end.
-    return Commands.sequence(
-        new InstantCommand(() -> m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose())),
-        swerveControllerCommand,
-        new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, false)));
- * 
- * 
- */
 
 
