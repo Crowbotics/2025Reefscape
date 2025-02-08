@@ -34,7 +34,7 @@ public class ClawSubsystem extends SubsystemBase{
         // Update sensor states
         for (int i = 0; i < m_sensorStates.length; i++) {
             m_sensorStates[i] = m_sensors[i].get();
-            SmartDashboard.putBooleanArray("Coral Sensor States", m_sensorStates);
+            SmartDashboard.putBoolean("Coral Sensor " + i, m_sensorStates[i]);
         }
     }
 
