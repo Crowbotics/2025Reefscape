@@ -3,10 +3,12 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
-public class ClimberSubsystem {
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+public class ClimberSubsystem extends SubsystemBase{
 
     public final SparkMax m_winch = new SparkMax(0, MotorType.kBrushless);
-    
+     
     public ClimberSubsystem() {
 
     }

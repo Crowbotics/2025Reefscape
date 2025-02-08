@@ -21,9 +21,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import frc.robot.Constants;
 import frc.robot.Constants.ModuleConstants;
-import frc.robot.Constants.PIDConstants;
 
 public class SwerveModule {
   private final SparkMax m_driveMotor;
@@ -31,22 +29,20 @@ public class SwerveModule {
 
   private final SparkMaxConfig m_driveConfig;
   private final SparkMaxConfig m_turnConfig;
-
-
  
   private final CANcoder m_turningEncoder;
 
   private final PIDController m_drivePIDController =
-      new PIDController(PIDConstants.kPModuleDriveController,
-                        PIDConstants.kIModuleDriveController,
-                        PIDConstants.kDModuleDriveController);
+      new PIDController(ModuleConstants.kPModuleDriveController,
+                        ModuleConstants.kIModuleDriveController,
+                        ModuleConstants.kDModuleDriveController);
 
   // Using a TrapezoidProfile PIDController to allow for smooth turning
   private final ProfiledPIDController m_turningPIDController =
       new ProfiledPIDController(
-          PIDConstants.kPModuleTurningController,
-          PIDConstants.kIModuleTurningController,
-          PIDConstants.kDModuleTurningController,
+          ModuleConstants.kPModuleTurningController,
+          ModuleConstants.kIModuleTurningController,
+          ModuleConstants.kDModuleTurningController,
           new TrapezoidProfile.Constraints(
               ModuleConstants.kMaxModuleAngularSpeedRadiansPerSecond,
               ModuleConstants.kMaxModuleAngularAccelerationRadiansPerSecondSquared));
@@ -73,8 +69,8 @@ public class SwerveModule {
 
     m_driveConfig .inverted(true)
                   .idleMode(IdleMode.kBrake);
-    m_driveConfig.encoder .positionConversionFactor(Constants.ModuleConstants.kDriveEncoderDistancePerPulse)
-                          .velocityConversionFactor(Constants.ModuleConstants.kDriveEncoderDistancePerPulse / 60.0);
+    m_driveConfig.encoder .positionConversionFactor(ModuleConstants.kDriveEncoderDistancePerPulse)
+                          .velocityConversionFactor(ModuleConstants.kDriveEncoderDistancePerPulse / 60.0);
 
     m_turnConfig  .inverted(true);
 
