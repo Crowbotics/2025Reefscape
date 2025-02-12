@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.ModuleConstants;
 
 public class DriveSubsystem extends SubsystemBase {
   // Robot swerve modules
@@ -56,6 +57,14 @@ public class DriveSubsystem extends SubsystemBase {
 
   // The gyro sensor
   private final AHRS m_gyro = new AHRS(NavXComType.kMXP_SPI);
+
+  double dp = ModuleConstants.kPModuleDriveController;
+  double di = ModuleConstants.kIModuleDriveController;
+  double dd = ModuleConstants.kDModuleDriveController;
+
+  double tp = ModuleConstants.kPModuleTurningController;
+  double ti = ModuleConstants.kIModuleTurningController;
+  double td = ModuleConstants.kDModuleTurningController;
 
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry =
@@ -116,14 +125,46 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearRight.getPosition()
         });
 
-        SmartDashboard.putNumber("FL Angle: ", m_frontLeft.getCancoderAngleInDegrees());
-        SmartDashboard.putNumber("FL Distance: ", m_frontLeft.getDriveDistance());
-        SmartDashboard.putNumber("FR Angle: ", m_frontRight.getCancoderAngleInDegrees());
-        SmartDashboard.putNumber("FR Distance: ", m_frontRight.getDriveDistance());
-        SmartDashboard.putNumber("RL Angle: ", m_rearLeft.getCancoderAngleInDegrees());
-        SmartDashboard.putNumber("RL Distance: ", m_rearLeft.getDriveDistance());
-        SmartDashboard.putNumber("RR Angle: ", m_rearRight.getCancoderAngleInDegrees());
-        SmartDashboard.putNumber("RR Distance: ", m_rearRight.getDriveDistance());
+        //SmartDashboard.putNumber("FL Angle: ", m_frontLeft.getCancoderAngleInDegrees());
+        //SmartDashboard.putNumber("FL Distance: ", m_frontLeft.getDriveDistance());
+        //SmartDashboard.putNumber("FR Angle: ", m_frontRight.getCancoderAngleInDegrees());
+        //SmartDashboard.putNumber("FR Distance: ", m_frontRight.getDriveDistance());
+        //SmartDashboard.putNumber("RL Angle: ", m_rearLeft.getCancoderAngleInDegrees());
+        //SmartDashboard.putNumber("RL Distance: ", m_rearLeft.getDriveDistance());
+        //SmartDashboard.putNumber("RR Angle: ", m_rearRight.getCancoderAngleInDegrees());
+        //SmartDashboard.putNumber("RR Distance: ", m_rearRight.getDriveDistance());
+
+        double temp_dp = dp, temp_di = di, temp_dd = dd, temp_tp = tp, temp_ti=ti, temp_td=td;
+
+        SmartDashboard.putNumber("Drive P: ", dp);
+        SmartDashboard.putNumber("Drive I: ", di);
+        SmartDashboard.putNumber("Drive D: ", dd);
+
+        SmartDashboard.putNumber("Turn P: ", tp)
+        SmartDashboard.putNumber("Turn I: ", ti);
+        SmartDashboard.putNumber("Turn D: ", td);
+
+        temp_dp = SmartDashboard.getNumber("Drive P: ", dp);
+        temp_di = SmartDashboard.getNumber("Drive I: ", di);
+        temp_dd = SmartDashboard.getNumber("Drive D: ", dd);
+
+        temp_tp = SmartDashboard.getNumber("Turn P: ", tp);
+        temp_ti = SmartDashboard.getNumber("Turn I: ", ti);
+        temp_td = SmartDashboard.getNumber("Turn D: ", td);
+
+        if(temp_dp != dp || temp_di != di || temp_dd != dd || temp_tp != tp || temp_ti != ti || temp_td!= td)
+        {
+          m_frontLeft.setPID(temp_dp, temp_di, temp_dd, temp_tp, temp_ti, temp_td);
+          m_frontRight.setPID(temp_dp, temp_di, temp_dd, temp_tp, temp_ti, temp_td);
+          m_rearLeft.setPID(temp_dp, temp_di, temp_dd, temp_tp, temp_ti, temp_td);
+          m_rearRight.setPID(temp_dp, temp_di, temp_dd, temp_tp, temp_ti, temp_td);
+
+          dp = temp_dp; di = temp_di; dd = temp_dd; tp = temp_tp; ti = temp_ti; td = temp_td;
+        }
+
+
+
+
 
         SmartDashboard.putNumber("Gyro: ", m_gyro.getAngle());
         SmartDashboard.putNumber("X: ", getPose().getX());

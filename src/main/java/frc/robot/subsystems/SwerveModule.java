@@ -32,13 +32,13 @@ public class SwerveModule {
  
   private final CANcoder m_turningEncoder;
 
-  private final PIDController m_drivePIDController =
+  private PIDController m_drivePIDController =
       new PIDController(ModuleConstants.kPModuleDriveController,
                         ModuleConstants.kIModuleDriveController,
                         ModuleConstants.kDModuleDriveController);
 
   // Using a TrapezoidProfile PIDController to allow for smooth turning
-  private final ProfiledPIDController m_turningPIDController =
+  private ProfiledPIDController m_turningPIDController =
       new ProfiledPIDController(
           ModuleConstants.kPModuleTurningController,
           ModuleConstants.kIModuleTurningController,
@@ -159,5 +159,18 @@ public class SwerveModule {
   public double getCancoderAngleInDegrees()
   {
     return Units.rotationsToDegrees(m_turningEncoder.getAbsolutePosition().getValueAsDouble());
+  }
+
+  public void setPID(double dp, double di, double dd, double tp, double ti, double td)
+  {
+    m_drivePIDController.setPID(dp, di, dd);
+    m_turningPIDController.setPID(tp, ti, td);
+  }
+
+  public String getPID()
+  {
+    return "Drive P: " + m_drivePIDController.getP() + "\tTurn P: " + m_turningPIDController.getP() + "/n" +
+      "Drive I: " + m_drivePIDController.getP() + "\tTurn I: " + m_turningPIDController.getP() + "/n" +
+      "Drive D: " + m_drivePIDController.getP() + "\tTurn D: " + m_turningPIDController.getP() + " ";
   }
 }
