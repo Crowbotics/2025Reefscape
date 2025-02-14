@@ -88,11 +88,19 @@ public class DriveSubsystem extends SubsystemBase {
       ppconfig = null;
     }
 
+    SmartDashboard.putNumber("Drive P: ", dp);
+    SmartDashboard.putNumber("Drive I: ", di);
+    SmartDashboard.putNumber("Drive D: ", dd);
+
+    SmartDashboard.putNumber("Turn P: ", tp);
+    SmartDashboard.putNumber("Turn I: ", ti);
+    SmartDashboard.putNumber("Turn D: ", td);
+
     AutoBuilder.configure(this::getPose, this::resetOdometry, this::getRobotRelativeSpeeds, 
     (speeds, ff)->drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, false), 
     
     new PPHolonomicDriveController(
-      new PIDConstants(5), new PIDConstants(5)), ppconfig, 
+      new PIDConstants(15, 1, 0), new PIDConstants(5)), ppconfig, 
       ()->{
         var alliance = DriverStation.getAlliance();
         if(alliance.isPresent()){
@@ -134,34 +142,30 @@ public class DriveSubsystem extends SubsystemBase {
         //SmartDashboard.putNumber("RR Angle: ", m_rearRight.getCancoderAngleInDegrees());
         //SmartDashboard.putNumber("RR Distance: ", m_rearRight.getDriveDistance());
 
-        double temp_dp = dp, temp_di = di, temp_dd = dd, temp_tp = tp, temp_ti=ti, temp_td=td;
+        SmartDashboard.putNumber("Actual Velocity: ", m_frontLeft.getSpeed());
+        SmartDashboard.putNumber("Desired Velocity: ", m_frontLeft.getDesiredSpeed());
+        SmartDashboard.putNumber("Drive Output: ", m_frontLeft.getDriveOutput());
 
-        SmartDashboard.putNumber("Drive P: ", dp);
-        SmartDashboard.putNumber("Drive I: ", di);
-        SmartDashboard.putNumber("Drive D: ", dd);
+        double temp_dp = SmartDashboard.getNumber("Drive P: ", 0.0);
+        double temp_di = SmartDashboard.getNumber("Drive I: ", 0.0);
+        double temp_dd = SmartDashboard.getNumber("Drive D: ", 0.0);
 
-        SmartDashboard.putNumber("Turn P: ", tp)
-        SmartDashboard.putNumber("Turn I: ", ti);
-        SmartDashboard.putNumber("Turn D: ", td);
-
-        temp_dp = SmartDashboard.getNumber("Drive P: ", dp);
-        temp_di = SmartDashboard.getNumber("Drive I: ", di);
-        temp_dd = SmartDashboard.getNumber("Drive D: ", dd);
-
-        temp_tp = SmartDashboard.getNumber("Turn P: ", tp);
-        temp_ti = SmartDashboard.getNumber("Turn I: ", ti);
-        temp_td = SmartDashboard.getNumber("Turn D: ", td);
+        double temp_tp = SmartDashboard.getNumber("Turn P: ", 0.0);
+        double temp_ti = SmartDashboard.getNumber("Turn I: ", 0.0);
+        double temp_td = SmartDashboard.getNumber("Turn D: ", 0.0);
 
         if(temp_dp != dp || temp_di != di || temp_dd != dd || temp_tp != tp || temp_ti != ti || temp_td!= td)
         {
-          m_frontLeft.setPID(temp_dp, temp_di, temp_dd, temp_tp, temp_ti, temp_td);
-          m_frontRight.setPID(temp_dp, temp_di, temp_dd, temp_tp, temp_ti, temp_td);
-          m_rearLeft.setPID(temp_dp, temp_di, temp_dd, temp_tp, temp_ti, temp_td);
-          m_rearRight.setPID(temp_dp, temp_di, temp_dd, temp_tp, temp_ti, temp_td);
+          //m_frontLeft.setPID(temp_dp, temp_di, temp_dd, temp_tp, temp_ti, temp_td);
+          //m_frontRight.setPID(temp_dp, temp_di, temp_dd, temp_tp, temp_ti, temp_td);
+          //m_rearLeft.setPID(temp_dp, temp_di, temp_dd, temp_tp, temp_ti, temp_td);
+          //m_rearRight.setPID(temp_dp, temp_di, temp_dd, temp_tp, temp_ti, temp_td);
 
           dp = temp_dp; di = temp_di; dd = temp_dd; tp = temp_tp; ti = temp_ti; td = temp_td;
         }
 
+
+        //SmartDashboard.putString("PID String: ", m_frontLeft.getPID());
 
 
 
@@ -211,6 +215,8 @@ public class DriveSubsystem extends SubsystemBase {
    * @param fieldRelative Whether the provided x and y speeds are relative to the field.
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+
+    //xSpeed = -4;
 
     var swerveModuleStates =
         DriveConstants.kDriveKinematics.toSwerveModuleStates(

@@ -59,6 +59,9 @@ public final class Constants {
 
     public static final boolean kGyroReversed = false;
 
+    public static final double kMaxSpeedMetersPerSecond = 4;
+  }
+
     // These are example values only - DO NOT USE THESE FOR YOUR OWN ROBOT!
     // These characterization values MUST be determined either experimentally or theoretically
     // for *your* robot's drive.
@@ -67,15 +70,13 @@ public final class Constants {
     public static final double kvVoltSecondsPerMeter = 0.8;
     public static final double kaVoltSecondsSquaredPerMeter = 0.15;
 
-    public static final double kMaxSpeedMetersPerSecond = 10;
-  }
 
   public static final class ModuleConstants {
     public static final double kMaxModuleAngularSpeedRadiansPerSecond = 4 * Math.PI;
     public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 8 * Math.PI;
 
     //public static final int kEncoderCPR = 1024*4;
-    public static final double kWheelDiameterMeters = 0.0827;
+    public static final double kWheelDiameterMeters = 0.102;
     public static final double kDriveGearRatio = 7.13;
     public static final double kDriveEncoderDistancePerPulse = (kWheelDiameterMeters * Math.PI) / kDriveGearRatio;
 
@@ -83,14 +84,14 @@ public final class Constants {
     public static final double kTurningEncoderDistancePerPulse = 2*Math.PI / kTurningGearRatio;
 
     //PID Values for individial module TURN motors
-    public static final double kPModuleTurningController = 0.5;
+    public static final double kPModuleTurningController = 0.275;
     public static final double kIModuleTurningController = 0;
-    public static final double kDModuleTurningController = 0.001;
+    public static final double kDModuleTurningController = 0.00001;
     
     //PID Values for individial module DRIVE motors
-    public static final double kPModuleDriveController = 0.5;
-    public static final double kIModuleDriveController = 0;
-    public static final double kDModuleDriveController = 0.0005;
+    public static final double kPModuleDriveController = 0.15;
+    public static final double kIModuleDriveController = 0.01;
+    public static final double kDModuleDriveController = 0.00001;
   }
 
   public static final class OIConstants {
@@ -133,21 +134,5 @@ public final class Constants {
   public static final class ClimberConstants {
     public static final int kWinchPort = 16;
 
-  }
-
-  public static final class AutoConstants {
-    public static final double kMaxSpeedMetersPerSecond = 3;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
-    public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
-    public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
-
-    public static final double kPXController = 1;
-    public static final double kPYController = 1;
-    public static final double kPThetaController = 1;
-
-    // Constraint for the motion profiled robot angle controller
-    public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
-        new TrapezoidProfile.Constraints(
-            kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
   }
 }
