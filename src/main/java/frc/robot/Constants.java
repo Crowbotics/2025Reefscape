@@ -72,11 +72,11 @@ public final class Constants {
 
 
   public static final class ModuleConstants {
-    public static final double kMaxModuleAngularSpeedRadiansPerSecond = 4 * Math.PI;
-    public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 8 * Math.PI;
+    public static final double kMaxModuleAngularSpeedRadiansPerSecond = 2 * Math.PI * 12.8;
+    public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 4 * Math.PI * 12.8;
 
     //public static final int kEncoderCPR = 1024*4;
-    public static final double kWheelDiameterMeters = 0.102;
+    public static final double kWheelDiameterMeters = 0.09652;
     public static final double kDriveGearRatio = 7.13;
     public static final double kDriveEncoderDistancePerPulse = (kWheelDiameterMeters * Math.PI) / kDriveGearRatio;
 
@@ -90,8 +90,8 @@ public final class Constants {
     
     //PID Values for individial module DRIVE motors
     public static final double kPModuleDriveController = 0.15;
-    public static final double kIModuleDriveController = 0.01;
-    public static final double kDModuleDriveController = 0.00001;
+    public static final double kIModuleDriveController = 0; //0.0001;
+    public static final double kDModuleDriveController = 0.001;
   }
 
   public static final class OIConstants {
@@ -133,6 +133,5 @@ public final class Constants {
 
   public static final class ClimberConstants {
     public static final int kWinchPort = 16;
-
   }
 }

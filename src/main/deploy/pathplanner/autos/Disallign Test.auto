@@ -7,19 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Collect (Part 1)"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 3.0
+            "pathName": "Disallign Test Pt.1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Outake (Part 2)"
+            "pathName": "Disallign Test Pt.2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Disallign Test Pt.3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Disallign Test Pt.4"
           }
         }
       ]

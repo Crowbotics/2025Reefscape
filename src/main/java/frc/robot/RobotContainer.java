@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -18,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import com.pathplanner.lib.auto.AutoBuilder;
 
@@ -39,6 +41,10 @@ public class RobotContainer {
   Joystick m_driverController = new Joystick(OIConstants.kDriverControllerPort);
   Joystick m_auxController = new Joystick(OIConstants.kAuxControllerPort);
 
+  SlewRateLimiter slewX = new SlewRateLimiter(10);
+  SlewRateLimiter slewY = new SlewRateLimiter(10);
+  SlewRateLimiter slewR = new SlewRateLimiter(8);
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     m_chooser = AutoBuilder.buildAutoChooser();
@@ -54,12 +60,12 @@ public class RobotContainer {
                     // Multiply by max speed to map the joystick unitless inputs to actual units.
                     // This will map the [-1, 1] to [max speed backwards, max speed forwards],
                     // converting them to actual units.
-                    -MathUtil.applyDeadband(m_driverController.getRawAxis(1), 0.075) 
-                        * DriveConstants.kMaxSpeedMetersPerSecond,
-                    -MathUtil.applyDeadband(m_driverController.getRawAxis(0), 0.075) 
-                        * DriveConstants.kMaxSpeedMetersPerSecond,
+                    slewX.calculate(-MathUtil.applyDeadband(m_driverController.getRawAxis(1), 0.075) 
+                        * DriveConstants.kMaxSpeedMetersPerSecond),
+                    slewY.calculate(-MathUtil.applyDeadband(m_driverController.getRawAxis(0), 0.075) 
+                        * DriveConstants.kMaxSpeedMetersPerSecond),
                     -MathUtil.applyDeadband(m_driverController.getRawAxis(4), 0.075)
-                        * ModuleConstants.kMaxModuleAngularSpeedRadiansPerSecond,
+                        * DriveConstants.kMaxSpeedMetersPerSecond*1.6,
                     true),
             m_robotDrive));
 
@@ -78,7 +84,7 @@ public class RobotContainer {
 
    private double kSlowmoMultiplier = 1;
 
-   public void slowmo () { kSlowmoMultiplier = 0.4;}
+   public void slowmo () { kSlowmoMultiplier = 0.1;}
 
    
 
@@ -95,6 +101,10 @@ public class RobotContainer {
     JoystickButton driverStart = new JoystickButton(m_driverController, 8);
     JoystickButton driverLS = new JoystickButton(m_driverController,9);
     JoystickButton driverRS = new JoystickButton(m_driverController,10);
+    POVButton driverPOVL = new POVButton(m_driverController, 0);
+    POVButton driverPOVR = new POVButton(m_driverController, 180);
+    POVButton driverPOVU = new POVButton(m_driverController, 90);
+    POVButton driverPOVD = new POVButton(m_driverController, 270);
 
     JoystickButton auxA = new JoystickButton(m_auxController, 1);
     JoystickButton auxB = new JoystickButton(m_auxController, 2);
@@ -107,11 +117,31 @@ public class RobotContainer {
     JoystickButton auxLS = new JoystickButton(m_auxController,9);
     JoystickButton auxRS = new JoystickButton(m_auxController,10);
 
-    new Trigger(driverA.onTrue(Commands.runOnce(m_robotDrive::zeroHeading , m_robotDrive)));
-    new Trigger(driverB.onTrue(Commands.runOnce(m_robotDrive::resetPose, m_robotDrive)));
+    new Trigger(driverLS.onTrue(Commands.runOnce(m_robotDrive::zeroHeading , m_robotDrive)));
+    new Trigger(driverRS.onTrue(Commands.runOnce(m_robotDrive::resetPose, m_robotDrive)));
 
     new Trigger(driverLB.onTrue(Commands.runOnce(m_arm::moveArmForward, m_arm)));
     new Trigger(driverRB.onTrue(Commands.runOnce(m_arm::moveArmBackward, m_arm)));
+
+    new Trigger(driverPOVU.whileTrue(
+      new RunCommand(
+        () ->
+            m_robotDrive.drive(
+                // Multiply by max speed to map the joystick unitless inputs to actual units.
+                // This will map the [-1, 1] to [max speed backwards, max speed forwards],
+                // converting them to actual units.
+                -MathUtil.applyDeadband(m_driverController.getRawAxis(1), 0.075) 
+                    * DriveConstants.kMaxSpeedMetersPerSecond/2.0,
+                -MathUtil.applyDeadband(m_driverController.getRawAxis(0), 0.075) 
+                    * DriveConstants.kMaxSpeedMetersPerSecond/2.0,
+                -MathUtil.applyDeadband(m_driverController.getRawAxis(4), 0.075)
+                    * DriveConstants.kMaxSpeedMetersPerSecond,
+                true),
+        m_robotDrive))
+
+    );
+
+
   }
 
 

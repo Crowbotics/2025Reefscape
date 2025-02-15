@@ -11,6 +11,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -80,6 +81,8 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
+    zeroHeading();
+
     RobotConfig ppconfig;
     try{
       ppconfig = RobotConfig.fromGUISettings();
@@ -100,7 +103,7 @@ public class DriveSubsystem extends SubsystemBase {
     (speeds, ff)->drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, false), 
     
     new PPHolonomicDriveController(
-      new PIDConstants(15, 1, 0), new PIDConstants(5)), ppconfig, 
+      new PIDConstants(5), new PIDConstants(5)), ppconfig, 
       ()->{
         var alliance = DriverStation.getAlliance();
         if(alliance.isPresent()){
@@ -143,8 +146,10 @@ public class DriveSubsystem extends SubsystemBase {
         //SmartDashboard.putNumber("RR Distance: ", m_rearRight.getDriveDistance());
 
         SmartDashboard.putNumber("Actual Velocity: ", m_frontLeft.getSpeed());
-        SmartDashboard.putNumber("Desired Velocity: ", m_frontLeft.getDesiredSpeed());
-        SmartDashboard.putNumber("Drive Output: ", m_frontLeft.getDriveOutput());
+        SmartDashboard.putNumber("Desired Velocity: ", m_frontLeft.m_desiredSpeed);
+        SmartDashboard.putNumber("Drive Output: ", m_frontLeft.m_driveOutput);
+        SmartDashboard.putNumber("Motor Set To: ", m_frontLeft.motorOutput());
+        SmartDashboard.putNumber("Motor V: ", m_frontLeft.motorOutputV());
 
         double temp_dp = SmartDashboard.getNumber("Drive P: ", 0.0);
         double temp_di = SmartDashboard.getNumber("Drive I: ", 0.0);

@@ -7,7 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Swerve Test 5 Meter"
+            "pathName": " First Half Sideways"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Second Half Sideways"
           }
         }
       ]

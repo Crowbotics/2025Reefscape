@@ -26,6 +26,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 
 public class SwerveModule {
@@ -39,6 +40,11 @@ public class SwerveModule {
 
   private SparkClosedLoopController m_drivePIDController;
 
+  private SimpleMotorFeedforward turnff = new SimpleMotorFeedforward(0.008, 0.03);
+
+  
+  //private SparkClosedLoopController m_turningPIDController;
+
   // Using a TrapezoidProfile PIDController to allow for smooth turning
   private ProfiledPIDController m_turningPIDController =
       new ProfiledPIDController(
@@ -49,9 +55,8 @@ public class SwerveModule {
               ModuleConstants.kMaxModuleAngularSpeedRadiansPerSecond,
               ModuleConstants.kMaxModuleAngularAccelerationRadiansPerSecondSquared));
 
-   final SimpleMotorFeedforward feed = new SimpleMotorFeedforward(0.01, 0);
-     private double desiredSpeed = 0;
-     private double m_driveOutput = 0;
+  double m_desiredSpeed = 0;
+  double m_driveOutput = 0;
    
      /**
       * Constructs a SwerveModule.
@@ -63,40 +68,39 @@ public class SwerveModule {
       * @param driveEncoderReversed Whether the drive encoder is reversed.
       * @param turningEncoderReversed Whether the turning encoder is reversed.
       */
-     public SwerveModule(
-         int driveMotorChannel,
-         int turningMotorChannel,
-         int turningEncoderChannel,
-         double offset) {
-       m_driveMotor = new SparkMax(driveMotorChannel, MotorType.kBrushless);
-       m_turningMotor = new SparkMax(turningMotorChannel, MotorType.kBrushless);
-       m_driveConfig = new SparkMaxConfig();
-       m_turnConfig = new SparkMaxConfig();
+     public SwerveModule(int driveMotorChannel, int turningMotorChannel, int turningEncoderChannel, double offset) {
+      m_driveMotor    = new SparkMax(driveMotorChannel, MotorType.kBrushless);
+      m_turningMotor  = new SparkMax(turningMotorChannel, MotorType.kBrushless);
+      m_driveConfig   = new SparkMaxConfig();
+      m_turnConfig    = new SparkMaxConfig();
    
-       m_driveConfig .inverted(true)
-                     .idleMode(IdleMode.kBrake);
-       m_driveConfig.encoder .positionConversionFactor(ModuleConstants.kDriveEncoderDistancePerPulse)
-                             .velocityConversionFactor(ModuleConstants.kDriveEncoderDistancePerPulse / 60.0);
+      m_driveConfig .inverted(true)
+                    .idleMode(IdleMode.kBrake);
+
+      m_driveConfig.encoder .positionConversionFactor(ModuleConstants.kDriveEncoderDistancePerPulse)
+                            .velocityConversionFactor(ModuleConstants.kDriveEncoderDistancePerPulse / 60.0);
 
       m_driveConfig.closedLoop
                             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                             .pid(ModuleConstants.kPModuleDriveController,
                                 ModuleConstants.kIModuleDriveController,
                                 ModuleConstants.kDModuleDriveController)
-                                .outputRange(-4 , 4);
+                            .velocityFF(0.22)
+                            .outputRange(-DriveConstants.kMaxSpeedMetersPerSecond , 
+                                              DriveConstants.kMaxSpeedMetersPerSecond);
    
-       m_turnConfig  .inverted(true);
+      m_turnConfig  .inverted(true);
    
-       m_driveMotor.configure(m_driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-       m_turningMotor.configure(m_turnConfig,ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      m_driveMotor.configure(m_driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      m_turningMotor.configure(m_turnConfig,ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-       m_drivePIDController = m_driveMotor.getClosedLoopController();
+      m_drivePIDController = m_driveMotor.getClosedLoopController();
    
-       m_turningEncoder = new CANcoder(turningEncoderChannel);
-       CANcoderConfiguration toApply = new CANcoderConfiguration();
-       toApply.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
-       toApply.MagnetSensor.MagnetOffset = offset;
-       m_turningEncoder.getConfigurator().apply(toApply);
+      m_turningEncoder = new CANcoder(turningEncoderChannel);
+      CANcoderConfiguration toApply = new CANcoderConfiguration();
+      toApply.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
+      toApply.MagnetSensor.MagnetOffset = offset;
+      m_turningEncoder.getConfigurator().apply(toApply);
    
        //m_turningEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderDistancePerPulse);
    
@@ -137,8 +141,6 @@ public class SwerveModule {
       */
      public void setDesiredState(SwerveModuleState desiredState) {
        var encoderRotation = new Rotation2d(getCancoderAngleInRadians());
-
-       desiredSpeed = desiredState.speedMetersPerSecond;
    
        // Optimize the reference state to avoid spinning further than 90 degrees
        desiredState.optimize(encoderRotation);
@@ -158,12 +160,14 @@ public class SwerveModule {
        final double turnOutput =
            m_turningPIDController.calculate(
              getCancoderAngleInRadians(), desiredState.angle.getRadians());
+
+      m_desiredSpeed = desiredState.speedMetersPerSecond;
    
              //m_driveOutput = driveOutput;
        // Calculate the turning motor output from the turning PID controller.
        //m_driveMotor.set(driveOutput + feed.calculate(desiredState.speedMetersPerSecond);
        m_drivePIDController.setReference(desiredState.speedMetersPerSecond, ControlType.kVelocity);
-       m_turningMotor.set(turnOutput);
+       m_turningMotor.set(turnOutput + turnff.calculate(turnOutput));
      }
    
      /** Zeroes all the SwerveModule encoders. */
@@ -192,27 +196,14 @@ public class SwerveModule {
        //m_drivePIDController.set(dp, di, dd);
        m_turningPIDController.setPID(tp, ti, td);
      }
-   
-     /*
-     public String getPID()
-     {
-       return "Drive P: " + m_drivePIDController.getP() + "\tTurn P: " + m_turningPIDController.getP() + "\n" +
-         "Drive I: " + m_drivePIDController.getI() + "\tTurn I: " + m_turningPIDController.getI() + "\n" +
-         "Drive D: " + m_drivePIDController.getD() + "\tTurn D: " + m_turningPIDController.getD() + " ";
-     } */
-   
-     public int getTicks()
-     {
-       return (int)m_driveMotor.getAbsoluteEncoder().getPosition();
-     }
-   
-     public double getDesiredSpeed()
-     {
-       return desiredSpeed;
-      }
 
-      public double getDriveOutput()
-      {
-        return m_driveOutput;
-      }
+     public double motorOutput()
+     {
+      return m_driveMotor.get();
+     }
+
+     public double motorOutputV()
+     {
+      return m_driveMotor.getAppliedOutput();
+     }
 }
