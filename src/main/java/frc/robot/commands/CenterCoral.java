@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ClawConstants;
 import frc.robot.subsystems.ClawSubsystem;
 
+// Command is unused
+// Use centerCoral from the ClawSubsystem
 public class CenterCoral extends Command {
     private final ClawSubsystem m_clawSubsystem;
     private final boolean[] m_sensorStates;
