@@ -5,6 +5,7 @@ import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClawConstants;
 
@@ -38,6 +39,10 @@ public class ClawSubsystem extends SubsystemBase{
         }
     }
 
+    public boolean[] getCoralSensorStates() {
+        return m_sensorStates;
+    }
+
     public void intake() {
         m_topCollector.set(ClawConstants.kCollectorSpeed);
         m_bottomCollector.set(ClawConstants.kCollectorSpeed);
@@ -51,15 +56,23 @@ public class ClawSubsystem extends SubsystemBase{
     }
 
     public void centerCoral() {
+        
+    }
 
+    public void setLeftManipulator(double speed) {
+        m_leftManipulator.set(speed);
+    }
+
+    public void setRightManipulator(double speed) {
+        m_rightManipulator.set(speed);
     }
 
     public void ejectCoralLeft() {
-
+        m_leftManipulator.set(ClawConstants.kManipulatorSpeed);
     }
 
     public void ejectCoralRight() {
-        
+        m_leftManipulator.set(ClawConstants.kManipulatorSpeed);
     }
     
 }
