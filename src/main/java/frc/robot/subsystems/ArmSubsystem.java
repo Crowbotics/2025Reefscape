@@ -42,7 +42,7 @@ public class ArmSubsystem extends SubsystemBase{
             this.position = pos;
         }
 
-        //Sets up how we iterate through ar mstates
+        //Sets up how we iterate through arm states
         static{
             GROUND_FRONT.next = L2_FRONT;       GROUND_FRONT.prev = GROUND_FRONT;
             L2_FRONT.next =     STRAIGHT_UP;    L2_FRONT.prev =     GROUND_FRONT;

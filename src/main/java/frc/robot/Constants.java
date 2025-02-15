@@ -6,7 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.TimedRobot;
 
 /**
@@ -129,6 +128,8 @@ public final class Constants {
 
     public static final double kCollectorSpeed = 1;
     public static final double kReverseCollectorSpeed = -1;
+
+    public static final double kManipulatorSpeed = 1; // 0 - 1
   }
 
   public static final class ClimberConstants {

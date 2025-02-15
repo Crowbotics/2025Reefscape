@@ -14,6 +14,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -36,6 +37,7 @@ public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ArmSubsystem m_arm = new ArmSubsystem();
+  private final ClawSubsystem m_claw = new ClawSubsystem();
 
   // The driver's controller
   Joystick m_driverController = new Joystick(OIConstants.kDriverControllerPort);
@@ -119,6 +121,12 @@ public class RobotContainer {
 
     new Trigger(driverLS.onTrue(Commands.runOnce(m_robotDrive::zeroHeading , m_robotDrive)));
     new Trigger(driverRS.onTrue(Commands.runOnce(m_robotDrive::resetPose, m_robotDrive)));
+
+    // Center coral
+    new Trigger(driverX.onTrue(
+      m_claw.outtakeExtraCoral()
+      .andThen(m_claw.centerCoral())
+    ));
 
     new Trigger(driverLB.onTrue(Commands.runOnce(m_arm::moveArmForward, m_arm)));
     new Trigger(driverRB.onTrue(Commands.runOnce(m_arm::moveArmBackward, m_arm)));
