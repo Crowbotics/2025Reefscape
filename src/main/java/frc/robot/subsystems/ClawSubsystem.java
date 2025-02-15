@@ -2,8 +2,6 @@ package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-import java.util.function.Consumer;
-
 import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -90,13 +88,13 @@ public class ClawSubsystem extends SubsystemBase{
             }
         }, () -> {
             if (outtakeDirection == "Right") {
-                m_rightManipulator.set(ClawConstants.kManipulatorSpeed);
+                //m_rightManipulator.set(ClawConstants.kManipulatorSpeed);
             } else if (outtakeDirection == "Left") {
-                m_leftManipulator.set(ClawConstants.kManipulatorSpeed);
+                //m_leftManipulator.set(ClawConstants.kManipulatorSpeed);
             }
         }, (Boolean interrupted) -> {
-            m_leftManipulator.set(0);
-            m_rightManipulator.set(0);
+            //m_leftManipulator.set(0);
+            //m_rightManipulator.set(0);
             SmartDashboard.putBoolean("Outtaking Extra Coral", false);
             SmartDashboard.putString("Outtake Extra Coral Direction", "None");
         }, () -> {
@@ -110,18 +108,15 @@ public class ClawSubsystem extends SubsystemBase{
     public Command centerCoral() {
         return new FunctionalCommand(() -> {
             if (m_sensorStates[0] == true) {
-                m_leftManipulator.set(-ClawConstants.kManipulatorSpeed);
+                //m_leftManipulator.set(-ClawConstants.kManipulatorSpeed);
             } else if (this.m_sensorStates[3] == true) {
-                m_rightManipulator.set(-ClawConstants.kManipulatorSpeed);
+                //m_rightManipulator.set(-ClawConstants.kManipulatorSpeed);
             }
             SmartDashboard.putBoolean("CenterCoral Running", true);
-        }, null, new Consumer<Boolean>() {
-            @Override
-            public void accept(Boolean t) {
-                m_leftManipulator.set(0);
-                m_rightManipulator.set(0);
-                SmartDashboard.putBoolean("CenterCoral Running", false);
-            }
+        }, () -> {}, (Boolean interrupted) -> {
+            m_leftManipulator.set(0);
+            m_rightManipulator.set(0);
+            SmartDashboard.putBoolean("CenterCoral Running", false);
         }, () -> {
             if (m_sensorStates[1] == true && m_sensorStates[2] == true) {
                 return true;
