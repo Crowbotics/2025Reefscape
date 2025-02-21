@@ -54,6 +54,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("moveArmForward", m_arm.moveArmForward());
     NamedCommands.registerCommand("moveArmBackward", m_arm.moveArmBackward());
     NamedCommands.registerCommand("intake", m_claw.intake());
+    NamedCommands.registerCommand("stopIntake", m_claw.stopIntake());
 
     m_chooser = AutoBuilder.buildAutoChooser();
 

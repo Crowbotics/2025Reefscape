@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
@@ -138,6 +139,12 @@ public class ClawSubsystem extends SubsystemBase{
             () -> setCollectorMotors(ClawConstants.kCollectorSpeed, -ClawConstants.kCollectorSpeed, false),
             () -> setCollectorMotors(0, 0, false),
             this);
+    }
+
+    public Command stopIntake() {
+        return new RunCommand(() -> {
+            setCollectorMotors(0, 0, false);
+        }, this);
     }
 
     public Command reverseIntake() {
