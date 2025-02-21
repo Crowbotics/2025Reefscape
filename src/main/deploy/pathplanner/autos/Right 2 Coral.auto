@@ -7,31 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Disallign Test Pt.1"
+            "pathName": "Right 2 Coral Pt.1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Disallign Test Pt.2"
+            "pathName": "Right 2 Coral Pt.2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Disallign Test Pt.3"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Disallign Test Pt.4"
+            "pathName": "Right 2 Coral Pt.3"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Simple Autos",
   "choreoAuto": false
 }

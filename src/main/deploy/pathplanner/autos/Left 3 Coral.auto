@@ -7,31 +7,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Disallign Test Pt.1"
+            "pathName": "Left 3 Coral Pt.1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Disallign Test Pt.2"
+            "pathName": "Left 3 Coral Pt.2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Disallign Test Pt.3"
+            "pathName": "Left 3 Coral Pt.3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Disallign Test Pt.4"
+            "pathName": "Left 3 Coral Pt.4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left 3 Coral Pt.5"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Simple Autos",
   "choreoAuto": false
 }
