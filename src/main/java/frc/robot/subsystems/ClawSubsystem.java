@@ -8,7 +8,9 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import frc.robot.Constants.ClawConstants;
 
 public class ClawSubsystem extends SubsystemBase{
@@ -88,13 +90,13 @@ public class ClawSubsystem extends SubsystemBase{
             }
         }, () -> {
             if (outtakeDirection == "Right") {
-                //m_rightManipulator.set(ClawConstants.kManipulatorSpeed);
+                m_rightManipulator.set(ClawConstants.kManipulatorSpeed);
             } else if (outtakeDirection == "Left") {
-                //m_leftManipulator.set(ClawConstants.kManipulatorSpeed);
+                m_leftManipulator.set(ClawConstants.kManipulatorSpeed);
             }
         }, (Boolean interrupted) -> {
-            //m_leftManipulator.set(0);
-            //m_rightManipulator.set(0);
+            m_leftManipulator.set(0);
+            m_rightManipulator.set(0);
             SmartDashboard.putBoolean("Outtaking Extra Coral", false);
             SmartDashboard.putString("Outtake Extra Coral Direction", "None");
         }, () -> {
@@ -102,15 +104,17 @@ public class ClawSubsystem extends SubsystemBase{
                 return true;
             }
             return false;
-        }, this);
+        }, this)
+        
+        .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
 
     public Command centerCoral() {
         return new FunctionalCommand(() -> {
             if (m_sensorStates[0] == true) {
-                //m_leftManipulator.set(-ClawConstants.kManipulatorSpeed);
+                m_leftManipulator.set(-ClawConstants.kManipulatorSpeed);
             } else if (this.m_sensorStates[3] == true) {
-                //m_rightManipulator.set(-ClawConstants.kManipulatorSpeed);
+                m_rightManipulator.set(-ClawConstants.kManipulatorSpeed);
             }
             SmartDashboard.putBoolean("CenterCoral Running", true);
         }, () -> {}, (Boolean interrupted) -> {
@@ -122,40 +126,56 @@ public class ClawSubsystem extends SubsystemBase{
                 return true;
             }
             return false;
-        }, this);
+        }, this)
+
+        // Commands let other commands interrupt by default,
+        // but this is here for clarity
+        .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
 
-    public void intake() {
-        m_topCollector.set(ClawConstants.kCollectorSpeed);
-        m_bottomCollector.set(ClawConstants.kCollectorSpeed);
-
+    public Command intake() {
+        return new StartEndCommand(
+            () -> setCollectorMotors(ClawConstants.kCollectorSpeed, -ClawConstants.kCollectorSpeed, false),
+            () -> setCollectorMotors(0, 0, false),
+            this);
     }
 
-    public void reverseIntake() {
-        m_topCollector.set(ClawConstants.kReverseCollectorSpeed);
-        m_bottomCollector.set(ClawConstants.kReverseCollectorSpeed);
-
+    public Command reverseIntake() {
+        return new StartEndCommand(
+            () -> setCollectorMotors(-ClawConstants.kCollectorSpeed, ClawConstants.kCollectorSpeed, true),
+            () -> setCollectorMotors(0, 0, false),
+            this);
     }
 
-    public void stopIntake() {
-        m_topCollector.set(0);
-        m_bottomCollector.set(0);
+    public Command scoreLeft() {
+        return new StartEndCommand(
+            () -> setManipulatorMotors(ClawConstants.kManipulatorSpeed, -ClawConstants.kManipulatorSpeed),
+            () -> setManipulatorMotors(0, 0),
+            this);
     }
 
-    public void setLeftManipulator(double speed) {
-        m_leftManipulator.set(speed);
+    public Command scoreRight() {
+        return new StartEndCommand(
+            () -> setManipulatorMotors(-ClawConstants.kManipulatorSpeed, ClawConstants.kManipulatorSpeed),
+            () -> setManipulatorMotors(0, 0),
+            this);
     }
 
-    public void setRightManipulator(double speed) {
-        m_rightManipulator.set(speed);
+    private void setCollectorMotors(double top, double bottom, boolean reverse)
+    {
+        m_topCollector.set(top);
+        m_bottomCollector.set(bottom);
+        if(reverse){
+            m_kicker.set(0.3);
+        } else {
+            m_kicker.set(0);
+        }
     }
 
-    public void ejectCoralLeft() {
-        m_leftManipulator.set(ClawConstants.kManipulatorSpeed);
-    }
-
-    public void ejectCoralRight() {
-        m_leftManipulator.set(ClawConstants.kManipulatorSpeed);
+    private void setManipulatorMotors(double left, double right)
+    {
+        m_leftManipulator.set(left);
+        m_rightManipulator.set(right);
     }
     
 }

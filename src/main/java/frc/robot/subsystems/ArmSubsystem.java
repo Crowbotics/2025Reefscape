@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
+
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -11,6 +12,9 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
@@ -86,20 +90,33 @@ public class ArmSubsystem extends SubsystemBase{
         SmartDashboard.putString("Arm State: ", m_state.toString());
     }
 
-    public void moveArmForward() {
+    public Command moveArmForward(){
+        return Commands.runOnce(this::nextArmState, this);
+    }
+
+    public Command moveArmBackward(){
+        return Commands.runOnce(this::prevArmState, this);
+    }
+
+    public Command moveArmCommand(){
+        return new RunCommand(this::setArmReference, this);
+    }
+
+    private void setArmReference(){
+        m_pivotMotor1.getClosedLoopController().setReference(m_state.position, ControlType.kPosition);
+    }
+
+    private void nextArmState() {
         m_state = m_state.next();
     }
 
-    public void moveArmBackward() {
+    private void prevArmState() {
         m_state = m_state.prev();
-    }
-
-    public void setArmPosition() {
-        m_armController.setReference(m_state.position, ControlType.kPosition);
     }
 
     public double getArmPosition() {
         return m_armEncoder.getPosition();
     }
+
 
 }

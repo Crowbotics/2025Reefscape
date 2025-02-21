@@ -134,5 +134,7 @@ public final class Constants {
 
   public static final class ClimberConstants {
     public static final int kWinchPort = 16;
+
+    public static final double kWinchSpeed = 0.3;
   }
 }
