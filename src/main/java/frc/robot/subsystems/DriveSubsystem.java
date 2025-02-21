@@ -11,7 +11,6 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -20,8 +19,9 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
@@ -136,45 +136,6 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearRight.getPosition()
         });
 
-        //SmartDashboard.putNumber("FL Angle: ", m_frontLeft.getCancoderAngleInDegrees());
-        //SmartDashboard.putNumber("FL Distance: ", m_frontLeft.getDriveDistance());
-        //SmartDashboard.putNumber("FR Angle: ", m_frontRight.getCancoderAngleInDegrees());
-        //SmartDashboard.putNumber("FR Distance: ", m_frontRight.getDriveDistance());
-        //SmartDashboard.putNumber("RL Angle: ", m_rearLeft.getCancoderAngleInDegrees());
-        //SmartDashboard.putNumber("RL Distance: ", m_rearLeft.getDriveDistance());
-        //SmartDashboard.putNumber("RR Angle: ", m_rearRight.getCancoderAngleInDegrees());
-        //SmartDashboard.putNumber("RR Distance: ", m_rearRight.getDriveDistance());
-
-        SmartDashboard.putNumber("Actual Velocity: ", m_frontLeft.getSpeed());
-        SmartDashboard.putNumber("Desired Velocity: ", m_frontLeft.m_desiredSpeed);
-        SmartDashboard.putNumber("Drive Output: ", m_frontLeft.m_driveOutput);
-        SmartDashboard.putNumber("Motor Set To: ", m_frontLeft.motorOutput());
-        SmartDashboard.putNumber("Motor V: ", m_frontLeft.motorOutputV());
-
-        double temp_dp = SmartDashboard.getNumber("Drive P: ", 0.0);
-        double temp_di = SmartDashboard.getNumber("Drive I: ", 0.0);
-        double temp_dd = SmartDashboard.getNumber("Drive D: ", 0.0);
-
-        double temp_tp = SmartDashboard.getNumber("Turn P: ", 0.0);
-        double temp_ti = SmartDashboard.getNumber("Turn I: ", 0.0);
-        double temp_td = SmartDashboard.getNumber("Turn D: ", 0.0);
-
-        if(temp_dp != dp || temp_di != di || temp_dd != dd || temp_tp != tp || temp_ti != ti || temp_td!= td)
-        {
-          //m_frontLeft.setPID(temp_dp, temp_di, temp_dd, temp_tp, temp_ti, temp_td);
-          //m_frontRight.setPID(temp_dp, temp_di, temp_dd, temp_tp, temp_ti, temp_td);
-          //m_rearLeft.setPID(temp_dp, temp_di, temp_dd, temp_tp, temp_ti, temp_td);
-          //m_rearRight.setPID(temp_dp, temp_di, temp_dd, temp_tp, temp_ti, temp_td);
-
-          dp = temp_dp; di = temp_di; dd = temp_dd; tp = temp_tp; ti = temp_ti; td = temp_td;
-        }
-
-
-        //SmartDashboard.putString("PID String: ", m_frontLeft.getPID());
-
-
-
-
         SmartDashboard.putNumber("Gyro: ", m_gyro.getAngle());
         SmartDashboard.putNumber("X: ", getPose().getX());
         SmartDashboard.putNumber("Y: ", getPose().getY());
@@ -189,7 +150,7 @@ public class DriveSubsystem extends SubsystemBase {
     return m_odometry.getPoseMeters();
   }
 
-  public void resetPose()
+  private void resetPose()
   {
     resetOdometry(new Pose2d());
   }
@@ -220,8 +181,6 @@ public class DriveSubsystem extends SubsystemBase {
    * @param fieldRelative Whether the provided x and y speeds are relative to the field.
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-
-    //xSpeed = -4;
 
     var swerveModuleStates =
         DriveConstants.kDriveKinematics.toSwerveModuleStates(
@@ -263,8 +222,18 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   /** Zeroes the heading of the robot. */
-  public void zeroHeading() {
+  private void resetGyro() {
     m_gyro.zeroYaw();
+  }
+
+  public Command zeroHeading()
+  {
+    return Commands.runOnce(this::resetGyro, this);
+  }
+
+  public Command zeroPose()
+  {
+    return Commands.runOnce(this::resetPose, this);
   }
 
   /**

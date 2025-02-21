@@ -109,7 +109,7 @@ public final class Constants {
     public static final double kL2Rear      = 0.625;
     public static final double kGroundRear  = 0.9216;
 
-    public static final double kP = .1;
+    public static final double kP = 10;
     public static final double kI = 0;
     public static final double kD = 0;
   }
@@ -134,5 +134,7 @@ public final class Constants {
 
   public static final class ClimberConstants {
     public static final int kWinchPort = 16;
+
+    public static final double kWinchSpeed = 0.3;
   }
 }
