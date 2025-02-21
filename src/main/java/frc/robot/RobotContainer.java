@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -49,6 +50,12 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    // Register commands with PathPlanner
+    NamedCommands.registerCommand("moveArmForward", Commands.runOnce(m_arm::moveArmForward, m_arm));
+    NamedCommands.registerCommand("moveArmBackward", Commands.runOnce(m_arm::moveArmBackward, m_arm));
+    NamedCommands.registerCommand("intake", Commands.runOnce(m_claw::intake, m_claw));
+    NamedCommands.registerCommand("stopIntake", Commands.runOnce(m_claw::stopIntake, m_claw));
+
     m_chooser = AutoBuilder.buildAutoChooser();
 
     SmartDashboard.putData("Auto Chooser", m_chooser);

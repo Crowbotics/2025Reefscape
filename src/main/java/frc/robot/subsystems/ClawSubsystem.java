@@ -39,7 +39,7 @@ public class ClawSubsystem extends SubsystemBase{
         return sensorsActive;
     }
 
-    // Compares how a boolean array to what the sensors detect
+    // Compares a boolean array to what the sensors detect
     // Returns true if the array matches
     private boolean sensorsMatch(boolean[] states) {
         for (int i = 0; i < m_sensorStates.length; i++) {
@@ -72,14 +72,14 @@ public class ClawSubsystem extends SubsystemBase{
     public Command outtakeExtraCoral() {
         return new FunctionalCommand(() -> {
             SmartDashboard.putBoolean("Outtaking Extra Coral", true);
-            if (
+            if (    // Scenarios where we want to outtake to the right
                     sensorsMatch(new boolean[]{true, true, false, true}) ||
                     sensorsMatch(new boolean[]{false, true, true, true}) ||
                     sensorsMatch(new boolean[]{true, true, true, true})
             ) {
                 SmartDashboard.putString("Outtake Extra Coral Direction", "Right");
                 outtakeDirection = "Right";
-            } else if (
+            } else if ( // Scenarios where we want to outtake to the left
                 sensorsMatch(new boolean[]{true, false, true, true}) ||
                 sensorsMatch(new boolean[]{true, true, true, false})
             ) {
@@ -135,6 +135,11 @@ public class ClawSubsystem extends SubsystemBase{
         m_topCollector.set(ClawConstants.kReverseCollectorSpeed);
         m_bottomCollector.set(ClawConstants.kReverseCollectorSpeed);
 
+    }
+
+    public void stopIntake() {
+        m_topCollector.set(0);
+        m_bottomCollector.set(0);
     }
 
     public void setLeftManipulator(double speed) {
