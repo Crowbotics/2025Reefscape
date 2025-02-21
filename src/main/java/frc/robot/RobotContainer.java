@@ -6,22 +6,17 @@ package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.AnalogTrigger;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -86,31 +81,24 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
 
-   private double kSlowmoMultiplier = 1;
-
-   public void slowmo () { kSlowmoMultiplier = 0.1;}
-
-   
-
-
   private void configureButtonBindings() 
   {
-    JoystickButton driverA = new JoystickButton(m_driverController, 1);
+    //JoystickButton driverA = new JoystickButton(m_driverController, 1);
     JoystickButton driverB = new JoystickButton(m_driverController, 2);
     JoystickButton driverX = new JoystickButton(m_driverController, 3);
     JoystickButton driverY = new JoystickButton(m_driverController, 4);
     JoystickButton driverLeftBumper = new JoystickButton(m_driverController, 5);
     JoystickButton driverRightBumper = new JoystickButton(m_driverController,6);
-    JoystickButton driverSelect = new JoystickButton(m_driverController,7);
-    JoystickButton driverStart = new JoystickButton(m_driverController, 8);
+    //JoystickButton driverSelect = new JoystickButton(m_driverController,7);
+    //JoystickButton driverStart = new JoystickButton(m_driverController, 8);
     JoystickButton driverLeftStickIn = new JoystickButton(m_driverController,9);
     JoystickButton driverRightStickIn = new JoystickButton(m_driverController,10);
     Trigger driverLeftTrigger = new Trigger(() -> m_driverController.getRawAxis(2) > 0.5);
     Trigger driverRightTrigger = new Trigger(() -> m_driverController.getRawAxis(2) > 0.5);
-    POVButton driverPOVL = new POVButton(m_driverController, 0);
-    POVButton driverPOVR = new POVButton(m_driverController, 180);
+    //POVButton driverPOVL = new POVButton(m_driverController, 0);
+    //POVButton driverPOVR = new POVButton(m_driverController, 180);
     POVButton driverPOVU = new POVButton(m_driverController, 90);
-    POVButton driverPOVD = new POVButton(m_driverController, 270);
+    //POVButton driverPOVD = new POVButton(m_driverController, 270);
 
     //Claw Buttons
     new Trigger(driverLeftTrigger.whileTrue(m_claw.intake()));
@@ -142,9 +130,7 @@ public class RobotContainer {
                     * DriveConstants.kMaxSpeedMetersPerSecond,
                 true),
         m_robotDrive))
-
     );
-
 
   }
 
