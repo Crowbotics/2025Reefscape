@@ -11,10 +11,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClawSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -38,10 +39,10 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ArmSubsystem m_arm = new ArmSubsystem();
   private final ClawSubsystem m_claw = new ClawSubsystem();
+  private final ClimberSubsystem m_climber = new ClimberSubsystem();
 
   // The driver's controller
   Joystick m_driverController = new Joystick(OIConstants.kDriverControllerPort);
-  Joystick m_auxController = new Joystick(OIConstants.kAuxControllerPort);
 
   SlewRateLimiter slewX = new SlewRateLimiter(10);
   SlewRateLimiter slewY = new SlewRateLimiter(10);
@@ -49,6 +50,11 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    // Register commands with PathPlanner
+    NamedCommands.registerCommand("moveArmForward", m_arm.moveArmForward());
+    NamedCommands.registerCommand("moveArmBackward", m_arm.moveArmBackward());
+    NamedCommands.registerCommand("intake", m_claw.intake());
+
     m_chooser = AutoBuilder.buildAutoChooser();
 
     SmartDashboard.putData("Auto Chooser", m_chooser);
@@ -71,7 +77,7 @@ public class RobotContainer {
                     true),
             m_robotDrive));
 
-    m_arm.setDefaultCommand(new RunCommand(m_arm::setArmPosition, m_arm));
+    m_arm.setDefaultCommand(m_arm.moveArmCommand());
 
                 // Configure the button bindings
     configureButtonBindings();
@@ -84,53 +90,43 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
 
-   private double kSlowmoMultiplier = 1;
-
-   public void slowmo () { kSlowmoMultiplier = 0.1;}
-
-   
-
-
   private void configureButtonBindings() 
   {
-    JoystickButton driverA = new JoystickButton(m_driverController, 1);
+    //JoystickButton driverA = new JoystickButton(m_driverController, 1);
     JoystickButton driverB = new JoystickButton(m_driverController, 2);
     JoystickButton driverX = new JoystickButton(m_driverController, 3);
     JoystickButton driverY = new JoystickButton(m_driverController, 4);
-    JoystickButton driverLB = new JoystickButton(m_driverController, 5);
-    JoystickButton driverRB = new JoystickButton(m_driverController,6);
+    JoystickButton driverLeftBumper = new JoystickButton(m_driverController, 5);
+    JoystickButton driverRightBumper = new JoystickButton(m_driverController,6);
     JoystickButton driverSelect = new JoystickButton(m_driverController,7);
     JoystickButton driverStart = new JoystickButton(m_driverController, 8);
-    JoystickButton driverLS = new JoystickButton(m_driverController,9);
-    JoystickButton driverRS = new JoystickButton(m_driverController,10);
-    POVButton driverPOVL = new POVButton(m_driverController, 0);
-    POVButton driverPOVR = new POVButton(m_driverController, 180);
+    JoystickButton driverLeftStickIn = new JoystickButton(m_driverController,9);
+    JoystickButton driverRightStickIn = new JoystickButton(m_driverController,10);
+    Trigger driverLeftTrigger = new Trigger(() -> m_driverController.getRawAxis(2) > 0.5);
+    Trigger driverRightTrigger = new Trigger(() -> m_driverController.getRawAxis(2) > 0.5);
+    //POVButton driverPOVL = new POVButton(m_driverController, 0);
+    //POVButton driverPOVR = new POVButton(m_driverController, 180);
     POVButton driverPOVU = new POVButton(m_driverController, 90);
-    POVButton driverPOVD = new POVButton(m_driverController, 270);
+    //POVButton driverPOVD = new POVButton(m_driverController, 270);
 
-    JoystickButton auxA = new JoystickButton(m_auxController, 1);
-    JoystickButton auxB = new JoystickButton(m_auxController, 2);
-    JoystickButton auxX = new JoystickButton(m_auxController, 3);
-    JoystickButton auxY = new JoystickButton(m_auxController, 4);
-    JoystickButton auxLB = new JoystickButton(m_auxController, 5);
-    JoystickButton auxRB = new JoystickButton(m_auxController,6);
-    JoystickButton auxSelect = new JoystickButton(m_auxController,7);
-    JoystickButton auxStart = new JoystickButton(m_auxController, 8);
-    JoystickButton auxLS = new JoystickButton(m_auxController,9);
-    JoystickButton auxRS = new JoystickButton(m_auxController,10);
+    //Claw Buttons
+    new Trigger(driverLeftTrigger.whileTrue(m_claw.intake()));
+    new Trigger(driverRightTrigger.whileTrue(m_claw.reverseIntake()));
+    new Trigger(driverY.onTrue(m_claw.outtakeExtraCoral().andThen(m_claw.centerCoral())));
+    new Trigger(driverX.whileTrue(m_claw.scoreLeft()));
+    new Trigger(driverB.whileTrue(m_claw.scoreRight()));
 
-    new Trigger(driverLS.onTrue(Commands.runOnce(m_robotDrive::zeroHeading , m_robotDrive)));
-    new Trigger(driverRS.onTrue(Commands.runOnce(m_robotDrive::resetPose, m_robotDrive)));
+    //Arm Buttons
+    new Trigger(driverLeftBumper.onTrue(m_arm.moveArmForward()));
+    new Trigger(driverRightBumper.onTrue(m_arm.moveArmBackward()));
 
-    // Center coral
-    new Trigger(driverX.onTrue(
-      m_claw.outtakeExtraCoral()
-      .andThen(m_claw.centerCoral())
-    ));
+    //Climber Buttons
+    new Trigger(driverSelect.onTrue(m_climber.releaseWinch()));
+    new Trigger(driverStart.onTrue(m_climber.retractWinch()));
 
-    new Trigger(driverLB.onTrue(Commands.runOnce(m_arm::moveArmForward, m_arm)));
-    new Trigger(driverRB.onTrue(Commands.runOnce(m_arm::moveArmBackward, m_arm)));
-
+    //Drivetrain Buttons
+    new Trigger(driverLeftStickIn.onTrue(m_robotDrive.zeroHeading()));
+    new Trigger(driverRightStickIn.onTrue(m_robotDrive.zeroPose()));
     new Trigger(driverPOVU.whileTrue(
       new RunCommand(
         () ->
@@ -146,9 +142,7 @@ public class RobotContainer {
                     * DriveConstants.kMaxSpeedMetersPerSecond,
                 true),
         m_robotDrive))
-
     );
-
 
   }
 
