@@ -14,6 +14,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClawSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -36,6 +37,7 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ArmSubsystem m_arm = new ArmSubsystem();
   private final ClawSubsystem m_claw = new ClawSubsystem();
+  private final ClimberSubsystem m_climber = new ClimberSubsystem();
 
   // The driver's controller
   Joystick m_driverController = new Joystick(OIConstants.kDriverControllerPort);
@@ -89,8 +91,8 @@ public class RobotContainer {
     JoystickButton driverY = new JoystickButton(m_driverController, 4);
     JoystickButton driverLeftBumper = new JoystickButton(m_driverController, 5);
     JoystickButton driverRightBumper = new JoystickButton(m_driverController,6);
-    //JoystickButton driverSelect = new JoystickButton(m_driverController,7);
-    //JoystickButton driverStart = new JoystickButton(m_driverController, 8);
+    JoystickButton driverSelect = new JoystickButton(m_driverController,7);
+    JoystickButton driverStart = new JoystickButton(m_driverController, 8);
     JoystickButton driverLeftStickIn = new JoystickButton(m_driverController,9);
     JoystickButton driverRightStickIn = new JoystickButton(m_driverController,10);
     Trigger driverLeftTrigger = new Trigger(() -> m_driverController.getRawAxis(2) > 0.5);
@@ -111,6 +113,9 @@ public class RobotContainer {
     new Trigger(driverLeftBumper.onTrue(m_arm.moveArmForward()));
     new Trigger(driverRightBumper.onTrue(m_arm.moveArmBackward()));
 
+    //Climber Buttons
+    new Trigger(driverSelect.onTrue(m_climber.releaseWinch()));
+    new Trigger(driverStart.onTrue(m_climber.retractWinch()));
 
     //Drivetrain Buttons
     new Trigger(driverLeftStickIn.onTrue(m_robotDrive.zeroHeading()));
