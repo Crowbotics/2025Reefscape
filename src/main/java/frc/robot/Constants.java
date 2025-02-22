@@ -61,15 +61,6 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = 4;
   }
 
-    // These are example values only - DO NOT USE THESE FOR YOUR OWN ROBOT!
-    // These characterization values MUST be determined either experimentally or theoretically
-    // for *your* robot's drive.
-    // The SysId tool provides a convenient method for obtaining these values for your robot.
-    public static final double ksVolts = 1;
-    public static final double kvVoltSecondsPerMeter = 0.8;
-    public static final double kaVoltSecondsSquaredPerMeter = 0.15;
-
-
   public static final class ModuleConstants {
     public static final double kMaxModuleAngularSpeedRadiansPerSecond = 2 * Math.PI * 12.8;
     public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 4 * Math.PI * 12.8;
@@ -103,13 +94,15 @@ public final class Constants {
     public static final int kArmPort1 = 9;
     public static final int kArmPort2 = 10;
 
-    public static final double kGroundFront = 0.0784;
-    public static final double kL2Front     = 0.375;
+    public static final double kGroundFront = 0.15;
+    public static final double kL1Front     = 0.325;
+    public static final double kL2Front     = 0.4;
     public static final double kStraightUp  = 0.50;
-    public static final double kL2Rear      = 0.625;
-    public static final double kGroundRear  = 0.9216;
+    public static final double kL2Rear      = 0.6;
+    public static final double kL1Rear      = 0.675;
+    public static final double kGroundRear  = 0.85;
 
-    public static final double kP = 1;
+    public static final double kP = 2;
     public static final double kI = 0;
     public static final double kD = 0;
   }
@@ -127,9 +120,10 @@ public final class Constants {
     public static final int kCoralSensor3 = 3;
 
     public static final double kCollectorSpeed = 1;
-    public static final double kReverseCollectorSpeed = -1;
+    public static final double kReverseCollectorSpeed = -0.5;
 
-    public static final double kManipulatorSpeed = 0.5; // 0 - 1
+    public static final double kManipulatorSpeed = 0.1; // 0 - 1
+    public static final double kCenteringSpeed = 0.25;
   }
 
   public static final class ClimberConstants {
