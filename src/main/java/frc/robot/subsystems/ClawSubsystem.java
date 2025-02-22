@@ -1,8 +1,13 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,6 +18,8 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import frc.robot.Constants.ClawConstants;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.ModuleConstants;
 
 public class ClawSubsystem extends SubsystemBase{
 
@@ -56,6 +63,18 @@ public class ClawSubsystem extends SubsystemBase{
     public ClawSubsystem() {
         SmartDashboard.putBoolean("Outtaking Extra Coral", false);
         SmartDashboard.putString("Outtake Extra Coral Direction", "None");
+
+        SparkMaxConfig m_botConfig   = new SparkMaxConfig();
+        SparkMaxConfig m_leftConfig    = new SparkMaxConfig();
+   
+        m_botConfig .inverted(true)
+                    .idleMode(IdleMode.kBrake);
+
+        m_leftConfig.inverted(true)
+                    .idleMode(IdleMode.kBrake);
+   
+      m_leftManipulator.configure(m_leftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      m_bottomCollector.configure(m_botConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
     
     @Override
@@ -136,7 +155,7 @@ public class ClawSubsystem extends SubsystemBase{
 
     public Command intake() {
         return new StartEndCommand(
-            () -> setCollectorMotors(ClawConstants.kCollectorSpeed, -ClawConstants.kCollectorSpeed, false),
+            () -> setCollectorMotors(ClawConstants.kCollectorSpeed, ClawConstants.kCollectorSpeed, false),
             () -> setCollectorMotors(0, 0, false),
             this);
     }
@@ -149,21 +168,21 @@ public class ClawSubsystem extends SubsystemBase{
 
     public Command reverseIntake() {
         return new StartEndCommand(
-            () -> setCollectorMotors(-ClawConstants.kCollectorSpeed, ClawConstants.kCollectorSpeed, true),
+            () -> setCollectorMotors(-ClawConstants.kCollectorSpeed, -ClawConstants.kCollectorSpeed, true),
             () -> setCollectorMotors(0, 0, false),
             this);
     }
 
     public Command scoreLeft() {
         return new StartEndCommand(
-            () -> setManipulatorMotors(ClawConstants.kManipulatorSpeed, -ClawConstants.kManipulatorSpeed),
+            () -> setManipulatorMotors(-ClawConstants.kManipulatorSpeed, -ClawConstants.kManipulatorSpeed),
             () -> setManipulatorMotors(0, 0),
             this);
     }
 
     public Command scoreRight() {
         return new StartEndCommand(
-            () -> setManipulatorMotors(-ClawConstants.kManipulatorSpeed, ClawConstants.kManipulatorSpeed),
+            () -> setManipulatorMotors(ClawConstants.kManipulatorSpeed, ClawConstants.kManipulatorSpeed),
             () -> setManipulatorMotors(0, 0),
             this);
     }

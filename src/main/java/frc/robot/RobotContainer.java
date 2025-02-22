@@ -80,6 +80,7 @@ public class RobotContainer {
             m_robotDrive));
 
     m_arm.setDefaultCommand(m_arm.moveArmCommand());
+    m_climber.setDefaultCommand(m_climber.stopWinch());
 
                 // Configure the button bindings
     configureButtonBindings();
@@ -105,30 +106,30 @@ public class RobotContainer {
     JoystickButton driverLeftStickIn = new JoystickButton(m_driverController,9);
     JoystickButton driverRightStickIn = new JoystickButton(m_driverController,10);
     Trigger driverLeftTrigger = new Trigger(() -> m_driverController.getRawAxis(2) > 0.5);
-    Trigger driverRightTrigger = new Trigger(() -> m_driverController.getRawAxis(2) > 0.5);
-    POVButton driverPOVL = new POVButton(m_driverController, 0);
-    POVButton driverPOVR = new POVButton(m_driverController, 180);
-    POVButton driverPOVU = new POVButton(m_driverController, 90);
-    POVButton driverPOVD = new POVButton(m_driverController, 270);
+    Trigger driverRightTrigger = new Trigger(() -> m_driverController.getRawAxis(3) > 0.5);
+    POVButton driverPOVU = new POVButton(m_driverController, 0);
+    POVButton driverPOVR = new POVButton(m_driverController, 90);
+    POVButton driverPOVD = new POVButton(m_driverController, 180);
+    POVButton driverPOVL = new POVButton(m_driverController, 270);
 
     //Claw Buttons
     new Trigger(driverRightTrigger.whileTrue(m_claw.intake()));
-    //new Trigger(driverLeftTrigger.whileTrue(m_claw.reverseIntake()));
-    new Trigger(driverPOVR.onTrue(m_claw.centerCoral()));
-    new Trigger(driverPOVU.whileTrue(m_claw.scoreLeft()));
-    new Trigger(driverPOVL.whileTrue(m_claw.scoreRight()));
+    new Trigger(driverLeftTrigger.whileTrue(m_claw.reverseIntake()));
+    new Trigger(driverPOVU.onTrue(m_claw.centerCoral()));
+    new Trigger(driverPOVL.whileTrue(m_claw.scoreLeft()));
+    new Trigger(driverPOVR.whileTrue(m_claw.scoreRight()));
 
     //Arm Buttons
     new Trigger(driverRightBumper.onTrue(m_arm.moveArmForward()));
     new Trigger(driverLeftBumper.onTrue(m_arm.moveArmBackward()));
 
     //Climber Buttons
-    new Trigger(driverSelect.onTrue(m_climber.releaseWinch()));
-    new Trigger(driverStart.onTrue(m_climber.retractWinch()));
+    new Trigger(driverSelect.whileTrue(m_climber.releaseWinch()));
+    new Trigger(driverStart.whileTrue(m_climber.retractWinch()));
 
     //Drivetrain Buttons
     new Trigger(driverA.onTrue(m_robotDrive.zeroHeading()));
-    new Trigger(driverRightStickIn.onTrue(m_robotDrive.zeroPose()));
+    new Trigger(driverB.onTrue(m_robotDrive.zeroPose()));
     new Trigger(driverPOVD.whileTrue(
       new RunCommand(
         () ->

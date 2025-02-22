@@ -129,7 +129,7 @@ public final class Constants {
     public static final double kCollectorSpeed = 1;
     public static final double kReverseCollectorSpeed = -1;
 
-    public static final double kManipulatorSpeed = 1; // 0 - 1
+    public static final double kManipulatorSpeed = 0.5; // 0 - 1
   }
 
   public static final class ClimberConstants {
