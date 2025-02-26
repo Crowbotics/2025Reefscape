@@ -32,9 +32,11 @@ public class ArmSubsystem extends SubsystemBase{
 
     public enum ArmState {
         GROUND_FRONT    (ArmConstants.kGroundFront),
+        L1_FRONT        (ArmConstants.kL1Front),
         L2_FRONT        (ArmConstants.kL2Front),
         STRAIGHT_UP     (ArmConstants.kStraightUp),
         L2_REAR         (ArmConstants.kL2Rear),
+        L1_REAR         (ArmConstants.kL1Rear),
         GROUND_REAR     (ArmConstants.kGroundRear);
 
         public final double position;
@@ -48,11 +50,13 @@ public class ArmSubsystem extends SubsystemBase{
 
         //Sets up how we iterate through arm states
         static{
-            GROUND_FRONT.next = L2_FRONT;       GROUND_FRONT.prev = GROUND_FRONT;
-            L2_FRONT.next =     STRAIGHT_UP;    L2_FRONT.prev =     GROUND_FRONT;
-            STRAIGHT_UP.next =  L2_REAR;        STRAIGHT_UP.prev =  L2_FRONT;
-            L2_REAR.next =      GROUND_REAR;    L2_REAR.prev =      STRAIGHT_UP;
-            GROUND_REAR.next =  GROUND_REAR;    GROUND_REAR.prev =  L2_REAR;
+            GROUND_FRONT.next = L1_FRONT;       GROUND_FRONT.prev = GROUND_FRONT;
+            L1_FRONT.next =     L2_FRONT;       L1_FRONT.prev =     GROUND_FRONT;
+            L2_FRONT.next =     STRAIGHT_UP;    L2_FRONT.prev =     L1_FRONT;
+            STRAIGHT_UP.next =  STRAIGHT_UP; /*was L2_REAR*/        STRAIGHT_UP.prev = L2_FRONT;
+            L2_REAR.next =      L1_REAR;        L2_REAR.prev =      STRAIGHT_UP;
+            L1_REAR.next =      GROUND_REAR;    L1_REAR.prev =      L2_REAR;
+            GROUND_REAR.next =  GROUND_REAR;    GROUND_REAR.prev =  L1_REAR;
         }
 
         public ArmState next() { return this.next;}
