@@ -101,10 +101,13 @@ public final class Constants {
     public static final double kL2Rear      = 0.6;
     public static final double kL1Rear      = 0.675;
     public static final double kGroundRear  = 0.85;
+    public static final double kBeginClimb  = 0.25;
+    public static final double kEndClimb    = 0.25;
 
     public static final double kP = 2;
     public static final double kI = 0;
     public static final double kD = 0;
+    public static final double kFF = 0.1;
   }
 
   public static final class ClawConstants {
@@ -130,5 +133,12 @@ public final class Constants {
     public static final int kWinchPort = 16;
 
     public static final double kWinchSpeed = 0.3;
+
+    public static final double kWinchOut = -120.0;
+    public static final double kWinchIn = -0.0;
+
+    public static final double kP = 5.0;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
   }
 }

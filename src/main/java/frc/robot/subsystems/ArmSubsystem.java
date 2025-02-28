@@ -11,9 +11,12 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -37,11 +40,14 @@ public class ArmSubsystem extends SubsystemBase{
         STRAIGHT_UP     (ArmConstants.kStraightUp),
         L2_REAR         (ArmConstants.kL2Rear),
         L1_REAR         (ArmConstants.kL1Rear),
-        GROUND_REAR     (ArmConstants.kGroundRear);
+        GROUND_REAR     (ArmConstants.kGroundRear),
+        BEGIN_CLIMB     (ArmConstants.kBeginClimb),
+        END_CLIMB       (ArmConstants.kEndClimb);
+
 
         public final double position;
-        public ArmState next;
-        public ArmState prev;
+        public ArmState up;
+        public ArmState down;
 
         ArmState(double pos)
         {
@@ -50,24 +56,24 @@ public class ArmSubsystem extends SubsystemBase{
 
         //Sets up how we iterate through arm states
         static{
-            GROUND_FRONT.next = L1_FRONT;       GROUND_FRONT.prev = GROUND_FRONT;
-            L1_FRONT.next =     L2_FRONT;       L1_FRONT.prev =     GROUND_FRONT;
-            L2_FRONT.next =     STRAIGHT_UP;    L2_FRONT.prev =     L1_FRONT;
-            STRAIGHT_UP.next =  STRAIGHT_UP; /*was L2_REAR*/        STRAIGHT_UP.prev = L2_FRONT;
-            L2_REAR.next =      L1_REAR;        L2_REAR.prev =      STRAIGHT_UP;
-            L1_REAR.next =      GROUND_REAR;    L1_REAR.prev =      L2_REAR;
-            GROUND_REAR.next =  GROUND_REAR;    GROUND_REAR.prev =  L1_REAR;
+            GROUND_FRONT.up = L1_FRONT; GROUND_FRONT.down = GROUND_FRONT;
+            L1_FRONT.up =     L2_FRONT; L1_FRONT.down =     GROUND_FRONT;
+            L2_FRONT.up =     L2_REAR;  L2_FRONT.down =     L1_FRONT;
+            STRAIGHT_UP.up =  L2_REAR;  STRAIGHT_UP.down = L2_FRONT;
+            L2_REAR.up =      L2_FRONT; L2_REAR.down =      L1_REAR;
+            L1_REAR.up =      L2_REAR;  L1_REAR.down =      GROUND_REAR;
+            GROUND_REAR.up =  L1_REAR;  GROUND_REAR.down =  GROUND_REAR;
         }
 
-        public ArmState next() { return this.next;}
-        public ArmState prev() { return this.prev;}
+        public ArmState up() { return this.up;}
+        public ArmState down() { return this.down;}
     }
 
     public ArmState m_state;
     
     public ArmSubsystem() {
 
-        m_state = ArmState.STRAIGHT_UP;
+        m_state = ArmState.L1_FRONT;
 
         //Set Leader
         m_pivotMotor1Config
@@ -78,9 +84,10 @@ public class ArmSubsystem extends SubsystemBase{
 
         m_pivotMotor1Config.closedLoop
             .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-            .pid(   ArmConstants.kP,
+            .pidf(   ArmConstants.kP,
                     ArmConstants.kI,
-                    ArmConstants.kD);
+                    ArmConstants.kD,
+                    ArmConstants.kFF);
 
         m_pivotMotor1.configure(m_pivotMotor1Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -94,32 +101,53 @@ public class ArmSubsystem extends SubsystemBase{
         SmartDashboard.putString("Arm State: ", m_state.toString());
     }
 
-    public Command moveArmForward(){
-        return Commands.runOnce(this::nextArmState, this);
-    }
-
-    public Command moveArmBackward(){
-        return Commands.runOnce(this::prevArmState, this);
-    }
-
     public Command moveArmCommand(){
         return new RunCommand(this::setArmReference, this);
+    }
+
+    public Command moveArmStateDown(){
+        return Commands.runOnce(this::setArmStateDown, this);
+    }
+
+    public Command moveArmStateUp(){
+        return Commands.runOnce(this::setArmStateUp, this);
+    }
+
+    public Command moveArmStateToBeginClimbCommand() {
+        return Commands.runOnce(this::setArmStateBeginClimb);
+    }
+
+    public Command moveArmStateToEndClimbCommand() {
+        return Commands.runOnce(this::setArmStateEndClimb);
     }
 
     private void setArmReference(){
         m_pivotMotor1.getClosedLoopController().setReference(m_state.position, ControlType.kPosition);
     }
 
-    private void nextArmState() {
-        m_state = m_state.next();
+    private void setArmStateUp() {
+        m_state = m_state.up();
     }
 
-    private void prevArmState() {
-        m_state = m_state.prev();
+    private void setArmStateDown() {
+        m_state = m_state.down();
+    }
+
+    private void setArmStateBeginClimb() {
+        m_state = ArmState.BEGIN_CLIMB;
+    }
+
+    private void setArmStateEndClimb() {
+        m_state = ArmState.END_CLIMB;
     }
 
     public double getArmPosition() {
         return m_armEncoder.getPosition();
+    }
+
+    public boolean isArmAtSetpoint()
+    {
+        return Math.abs(m_pivotMotor1.getEncoder().getPosition() - m_state.position) < .05;
     }
 
 
