@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
-
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -12,11 +12,10 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -33,6 +32,10 @@ public class ArmSubsystem extends SubsystemBase{
     public final SparkMaxConfig m_pivotMotor1Config  = new SparkMaxConfig();
     public final SparkMaxConfig m_pivotMotor2Config = new SparkMaxConfig();
 
+    private final ArmFeedforward ff = new ArmFeedforward(ArmConstants.kS, ArmConstants.kG, ArmConstants.kV);
+    private double feedforward = 0.0;
+    private double velocity = 0.0;
+
     public enum ArmState {
         GROUND_FRONT    (ArmConstants.kGroundFront),
         L1_FRONT        (ArmConstants.kL1Front),
@@ -44,7 +47,6 @@ public class ArmSubsystem extends SubsystemBase{
         BEGIN_CLIMB     (ArmConstants.kBeginClimb),
         END_CLIMB       (ArmConstants.kEndClimb);
 
-
         public final double position;
         public ArmState up;
         public ArmState down;
@@ -54,8 +56,8 @@ public class ArmSubsystem extends SubsystemBase{
             this.position = pos;
         }
 
-        //Sets up how we iterate through arm states
         static{
+            //Sets up how we iterate through arm states
             GROUND_FRONT.up = L1_FRONT; GROUND_FRONT.down = GROUND_FRONT;
             L1_FRONT.up =     L2_FRONT; L1_FRONT.down =     GROUND_FRONT;
             L2_FRONT.up =     L2_REAR;  L2_FRONT.down =     L1_FRONT;
@@ -63,6 +65,10 @@ public class ArmSubsystem extends SubsystemBase{
             L2_REAR.up =      L2_FRONT; L2_REAR.down =      L1_REAR;
             L1_REAR.up =      L2_REAR;  L1_REAR.down =      GROUND_REAR;
             GROUND_REAR.up =  L1_REAR;  GROUND_REAR.down =  GROUND_REAR;
+
+            //Climb states do not cycle
+            BEGIN_CLIMB.up = BEGIN_CLIMB; BEGIN_CLIMB.down = BEGIN_CLIMB;
+            END_CLIMB.up   = END_CLIMB;   END_CLIMB.down = END_CLIMB;
         }
 
         public ArmState up() { return this.up;}
@@ -84,10 +90,10 @@ public class ArmSubsystem extends SubsystemBase{
 
         m_pivotMotor1Config.closedLoop
             .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-            .pidf(   ArmConstants.kP,
+            .pid(   ArmConstants.kP,
                     ArmConstants.kI,
-                    ArmConstants.kD,
-                    ArmConstants.kFF);
+                    ArmConstants.kD)
+            .outputRange(ArmConstants.kMinOutput, ArmConstants.kMaxOutput);
 
         m_pivotMotor1.configure(m_pivotMotor1Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -122,7 +128,16 @@ public class ArmSubsystem extends SubsystemBase{
     }
 
     private void setArmReference(){
-        m_pivotMotor1.getClosedLoopController().setReference(m_state.position, ControlType.kPosition);
+        feedforward = ff.calculate(m_state.position * Math.PI * 2.0 - Math.PI/2.0, velocity);
+
+        m_pivotMotor1.getClosedLoopController().setReference(m_state.position, 
+        ControlType.kPosition, 
+        ClosedLoopSlot.kSlot0, 
+        feedforward);
+
+        velocity = m_pivotMotor1.get();
+
+        
     }
 
     private void setArmStateUp() {

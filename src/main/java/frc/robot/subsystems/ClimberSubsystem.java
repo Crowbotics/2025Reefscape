@@ -13,9 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ClimberConstants;
 
 public class ClimberSubsystem extends SubsystemBase{
@@ -38,7 +36,8 @@ public class ClimberSubsystem extends SubsystemBase{
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
             .pid(   ClimberConstants.kP,
                     ClimberConstants.kI,
-                    ClimberConstants.kD).outputRange(-0.5,0.5);
+                    ClimberConstants.kD)
+            .outputRange(ClimberConstants.kMinOutput, ClimberConstants.kMaxOutput);
 
         m_winch.configure(m_winchConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
