@@ -1,13 +1,18 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
@@ -19,7 +24,9 @@ public class ClawSubsystem extends SubsystemBase{
     private final SparkMax m_bottomCollector = new SparkMax(ClawConstants.kBottomPort, MotorType.kBrushless);
     private final SparkMax m_leftManipulator = new SparkMax(ClawConstants.kLeftPort, MotorType.kBrushless);
     private final SparkMax m_rightManipulator = new SparkMax(ClawConstants.kRightPort, MotorType.kBrushless);
-    private final SparkMax m_kicker = new SparkMax(ClawConstants.kKickerPort, MotorType.kBrushless);
+    private final SparkMax m_puncher = new SparkMax(ClawConstants.kKickerPort, MotorType.kBrushless);
+
+    private double startPuncherEncoderValue;
     
     private final DigitalInput[] m_sensors = {
         new DigitalInput(ClawConstants.kCoralSensor0),
@@ -33,6 +40,20 @@ public class ClawSubsystem extends SubsystemBase{
     public ClawSubsystem() {
         SmartDashboard.putBoolean("Outtaking Extra Coral", false);
         SmartDashboard.putString("Outtake Extra Coral Direction", "None");
+
+        SparkMaxConfig m_botConfig   = new SparkMaxConfig();
+        SparkMaxConfig m_leftConfig    = new SparkMaxConfig();
+   
+        m_botConfig .inverted(true)
+                    .idleMode(IdleMode.kBrake);
+
+        m_leftConfig.inverted(true)
+                    .idleMode(IdleMode.kBrake);
+   
+      m_leftManipulator.configure(m_leftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      m_bottomCollector.configure(m_botConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+      startPuncherEncoderValue = m_puncher.getEncoder().getPosition();
     }
     
     @Override
@@ -42,6 +63,9 @@ public class ClawSubsystem extends SubsystemBase{
             m_sensorStates[i] = m_sensors[i].get();
             SmartDashboard.putBoolean("Coral Sensor " + i, m_sensorStates[i]);
         }
+
+        SmartDashboard.putNumber("Puncher Start: ", startPuncherEncoderValue);
+        SmartDashboard.putNumber("Puncher Current: ", m_puncher.getEncoder().getPosition());
     }
 
     // Returns the number of sensors that detect coral
@@ -110,12 +134,20 @@ public class ClawSubsystem extends SubsystemBase{
         .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
 
-    public Command centerCoral() {
+    public Command centerCoral() 
+    {
+        return new StartEndCommand(
+            () -> setManipulatorMotors(ClawConstants.kCenteringSpeed, -ClawConstants.kCenteringSpeed),
+            () -> setManipulatorMotors(0, 0),
+             this);
+    }
+
+    public Command centerCoralWithSensors() {
         return new FunctionalCommand(() -> {
             if (m_sensorStates[0] == true) {
-                m_leftManipulator.set(-ClawConstants.kManipulatorSpeed);
+                m_leftManipulator.set(-ClawConstants.kCenteringSpeed);
             } else if (this.m_sensorStates[3] == true) {
-                m_rightManipulator.set(-ClawConstants.kManipulatorSpeed);
+                m_rightManipulator.set(-ClawConstants.kCenteringSpeed);
             }
             SmartDashboard.putBoolean("CenterCoral Running", true);
         }, () -> {}, (Boolean interrupted) -> {
@@ -136,28 +168,40 @@ public class ClawSubsystem extends SubsystemBase{
 
     public Command intake() {
         return new StartEndCommand(
-            () -> setCollectorMotors(ClawConstants.kCollectorSpeed, -ClawConstants.kCollectorSpeed, false),
-            () -> setCollectorMotors(0, 0, false),
+            () -> {
+                setCollectorMotors(ClawConstants.kCollectorSpeed, ClawConstants.kCollectorSpeed, false);
+                setManipulatorMotors(ClawConstants.kCenteringSpeed, -ClawConstants.kCenteringSpeed);
+            },
+            () -> {
+                setCollectorMotors(0, 0, false);
+                setManipulatorMotors(0, 0);
+            },
             this);
+    }
+
+    public Command stopIntake() {
+        return new RunCommand(() -> {
+            setCollectorMotors(0, 0, false);
+        }, this);
     }
 
     public Command reverseIntake() {
         return new StartEndCommand(
-            () -> setCollectorMotors(-ClawConstants.kCollectorSpeed, ClawConstants.kCollectorSpeed, true),
+            () -> setCollectorMotors(ClawConstants.kReverseCollectorSpeed, ClawConstants.kReverseCollectorSpeed, true),
             () -> setCollectorMotors(0, 0, false),
             this);
     }
 
     public Command scoreLeft() {
         return new StartEndCommand(
-            () -> setManipulatorMotors(ClawConstants.kManipulatorSpeed, -ClawConstants.kManipulatorSpeed),
+            () -> setManipulatorMotors(ClawConstants.kManipulatorSpeed, ClawConstants.kManipulatorSpeed),
             () -> setManipulatorMotors(0, 0),
             this);
     }
 
     public Command scoreRight() {
         return new StartEndCommand(
-            () -> setManipulatorMotors(-ClawConstants.kManipulatorSpeed, ClawConstants.kManipulatorSpeed),
+            () -> setManipulatorMotors(-ClawConstants.kManipulatorSpeed, -ClawConstants.kManipulatorSpeed),
             () -> setManipulatorMotors(0, 0),
             this);
     }
@@ -167,9 +211,9 @@ public class ClawSubsystem extends SubsystemBase{
         m_topCollector.set(top);
         m_bottomCollector.set(bottom);
         if(reverse){
-            m_kicker.set(0.3);
+            m_puncher.set(0.3);
         } else {
-            m_kicker.set(0);
+            m_puncher.set(-0.3);
         }
     }
 
