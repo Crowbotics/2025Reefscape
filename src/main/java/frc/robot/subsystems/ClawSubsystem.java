@@ -30,28 +30,6 @@ public class ClawSubsystem extends SubsystemBase{
     // Sensor states left to right from the robot's perspective
     private final boolean[] m_sensorStates = {false, false, false, false};
 
-    // Returns the number of sensors that detect coral
-    private int numberOfSensorsActive() {
-        int sensorsActive = 0;
-        for (int i = 0; i < m_sensorStates.length; i++) {
-            if (m_sensorStates[i] == true) {
-                sensorsActive += 1;
-            }
-        }
-        return sensorsActive;
-    }
-
-    // Compares a boolean array to what the sensors detect
-    // Returns true if the array matches
-    private boolean sensorsMatch(boolean[] states) {
-        for (int i = 0; i < m_sensorStates.length; i++) {
-            if (states[i] != m_sensorStates[i]) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     public ClawSubsystem() {
         SmartDashboard.putBoolean("Outtaking Extra Coral", false);
         SmartDashboard.putString("Outtake Extra Coral Direction", "None");
@@ -66,6 +44,28 @@ public class ClawSubsystem extends SubsystemBase{
         }
     }
 
+    // Returns the number of sensors that detect coral
+    private int numberOfSensorsActive() {
+        int sensorsActive = 0;
+        for (int i = 0; i < m_sensorStates.length; i++) {
+            if (m_sensorStates[i] == true) {
+                sensorsActive += 1;
+            }
+        }
+        return sensorsActive;
+    }
+    
+    // Compares a boolean array to what the sensors detect
+    // Returns true if the array matches
+    private boolean sensorsMatch(boolean[] states) {
+        for (int i = 0; i < m_sensorStates.length; i++) {
+            if (states[i] != m_sensorStates[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public boolean[] getCoralSensorStates() {
         return m_sensorStates;
     }
@@ -74,24 +74,25 @@ public class ClawSubsystem extends SubsystemBase{
     public Command outtakeExtraCoral() {
         return new FunctionalCommand(() -> {
             SmartDashboard.putBoolean("Outtaking Extra Coral", true);
-            if (    // Scenarios where we want to outtake to the right
-                    sensorsMatch(new boolean[]{true, true, false, true}) ||
-                    sensorsMatch(new boolean[]{false, true, true, true}) ||
-                    sensorsMatch(new boolean[]{true, true, true, true})
-            ) {
-                SmartDashboard.putString("Outtake Extra Coral Direction", "Right");
-                outtakeDirection = "Right";
+
+            if (// Scenarios where we want to outtake to the right
+                sensorsMatch(new boolean[]{true, true, false, true}) ||
+                sensorsMatch(new boolean[]{false, true, true, true}) ||
+                sensorsMatch(new boolean[]{true, true, true, true})) {
+                    SmartDashboard.putString("Outtake Extra Coral Direction", "Right");
+                    outtakeDirection = "Right";
+
             } else if ( // Scenarios where we want to outtake to the left
                 sensorsMatch(new boolean[]{true, false, true, true}) ||
-                sensorsMatch(new boolean[]{true, true, true, false})
-            ) {
-                SmartDashboard.putString("Outtake Extra Coral Direction", "Left");
-                outtakeDirection = "Left";
+                sensorsMatch(new boolean[]{true, true, true, false})) {
+                    SmartDashboard.putString("Outtake Extra Coral Direction", "Left");
+                    outtakeDirection = "Left";
             }
-        }, () -> {
-            if (outtakeDirection == "Right") {
+        },
+        () -> {
+            if (outtakeDirection.equals("Right")) {
                 m_rightManipulator.set(ClawConstants.kManipulatorSpeed);
-            } else if (outtakeDirection == "Left") {
+            } else if (outtakeDirection.equals("Left")) {
                 m_leftManipulator.set(ClawConstants.kManipulatorSpeed);
             }
         }, (Boolean interrupted) -> {

@@ -7,37 +7,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left 3 Coral Pt.1"
+            "pathName": "Path 1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "Path 2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Left 3 Coral Pt.3"
+            "pathName": "Path 3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Left 3 Coral Pt.4"
+            "pathName": "Path 4"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Left 3 Coral Pt.5"
+            "pathName": "Path 3"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Simple Autos",
+  "folder": "Kylers Autos",
   "choreoAuto": false
 }
