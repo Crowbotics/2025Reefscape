@@ -9,10 +9,13 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
@@ -24,9 +27,11 @@ public class ClawSubsystem extends SubsystemBase{
     private final SparkMax m_bottomCollector = new SparkMax(ClawConstants.kBottomPort, MotorType.kBrushless);
     private final SparkMax m_leftManipulator = new SparkMax(ClawConstants.kLeftPort, MotorType.kBrushless);
     private final SparkMax m_rightManipulator = new SparkMax(ClawConstants.kRightPort, MotorType.kBrushless);
-    private final SparkMax m_puncher = new SparkMax(ClawConstants.kKickerPort, MotorType.kBrushless);
+    private final SparkMax m_puncher = new SparkMax(ClawConstants.kKickerPort, MotorType.kBrushed);
 
     private double startPuncherEncoderValue;
+
+    private Timer puncherTimer = new Timer();
     
     private final DigitalInput[] m_sensors = {
         new DigitalInput(ClawConstants.kCoralSensor0),
@@ -43,6 +48,9 @@ public class ClawSubsystem extends SubsystemBase{
 
         SparkMaxConfig m_botConfig   = new SparkMaxConfig();
         SparkMaxConfig m_leftConfig    = new SparkMaxConfig();
+        SparkMaxConfig m_puncherConfig        = new SparkMaxConfig();
+
+        m_puncherConfig .inverted(true);
    
         m_botConfig .inverted(true)
                     .idleMode(IdleMode.kBrake);
@@ -52,6 +60,7 @@ public class ClawSubsystem extends SubsystemBase{
    
       m_leftManipulator.configure(m_leftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
       m_bottomCollector.configure(m_botConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      m_puncher.configure(m_puncherConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
       startPuncherEncoderValue = m_puncher.getEncoder().getPosition();
     }
@@ -129,12 +138,10 @@ public class ClawSubsystem extends SubsystemBase{
                 return true;
             }
             return false;
-        }, this)
-        
-        .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
+        }, this);
     }
 
-    public Command centerCoral() 
+    public Command centerCoralCommand() 
     {
         return new StartEndCommand(
             () -> setManipulatorMotors(ClawConstants.kCenteringSpeed, -ClawConstants.kCenteringSpeed),
@@ -142,7 +149,7 @@ public class ClawSubsystem extends SubsystemBase{
              this);
     }
 
-    public Command centerCoralWithSensors() {
+    public Command centerCoralWithSensorsCommand() {
         return new FunctionalCommand(() -> {
             if (m_sensorStates[0] == true) {
                 m_leftManipulator.set(-ClawConstants.kCenteringSpeed);
@@ -159,14 +166,10 @@ public class ClawSubsystem extends SubsystemBase{
                 return true;
             }
             return false;
-        }, this)
-
-        // Commands let other commands interrupt by default,
-        // but this is here for clarity
-        .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
+        }, this);
     }
 
-    public Command intake() {
+    public Command intakeCommand() {
         return new StartEndCommand(
             () -> {
                 setCollectorMotors(ClawConstants.kCollectorSpeed, ClawConstants.kCollectorSpeed, false);
@@ -179,42 +182,57 @@ public class ClawSubsystem extends SubsystemBase{
             this);
     }
 
-    public Command stopIntake() {
+    public Command stopIntakeCommand() {
         return new RunCommand(() -> {
             setCollectorMotors(0, 0, false);
         }, this);
     }
 
-    public Command reverseIntake() {
+    public Command reverseIntakeCommand() {
         return new StartEndCommand(
             () -> setCollectorMotors(ClawConstants.kReverseCollectorSpeed, ClawConstants.kReverseCollectorSpeed, true),
             () -> setCollectorMotors(0, 0, false),
             this);
     }
 
-    public Command scoreLeft() {
+    public Command scoreLeftCommand() {
         return new StartEndCommand(
             () -> setManipulatorMotors(ClawConstants.kManipulatorSpeed, ClawConstants.kManipulatorSpeed),
             () -> setManipulatorMotors(0, 0),
             this);
     }
 
-    public Command scoreRight() {
+    public Command scoreRightCommand() {
         return new StartEndCommand(
             () -> setManipulatorMotors(-ClawConstants.kManipulatorSpeed, -ClawConstants.kManipulatorSpeed),
             () -> setManipulatorMotors(0, 0),
             this);
     }
 
-    private void setCollectorMotors(double top, double bottom, boolean reverse)
+    private void setCollectorMotors(double top, double bottom, boolean scoring)
     {
         m_topCollector.set(top);
         m_bottomCollector.set(bottom);
-        if(reverse){
-            m_puncher.set(0.3);
-        } else {
-            m_puncher.set(-0.3);
+        if(scoring){
+            m_puncher.set(0.6);
+            puncherTimer.reset();
+            puncherTimer.start();
         }
+    }
+
+    public Command retractPuncherCommand()
+    {
+        return new SequentialCommandGroup(
+            runOnce(()-> puncherTimer.reset()).andThen(
+            runOnce(()-> puncherTimer.start())).andThen(
+            run(() -> m_puncher.set(-0.8)))
+                .until(this::isPuncherRetracted)
+                .andThen(() -> m_puncher.set(0.0))).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+    }
+
+    private boolean isPuncherRetracted()
+    {
+        return puncherTimer.hasElapsed(0.5);
     }
 
     private void setManipulatorMotors(double left, double right)

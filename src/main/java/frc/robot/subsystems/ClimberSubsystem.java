@@ -59,7 +59,7 @@ public class ClimberSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("Winch Power: ", m_winch.get());
     }
 
-    public Command retractWinch() {
+    public Command retractWinchCommand() {
         
 
         return Commands.runOnce(this::setWInchRetract, this);
@@ -70,7 +70,7 @@ public class ClimberSubsystem extends SubsystemBase{
         winchPosition = ClimberConstants.kWinchIn;
     }
 
-    public Command releaseWinch() {
+    public Command releaseWinchCommand() {
         
 
         return Commands.runOnce(this::setWinchRelease, this);

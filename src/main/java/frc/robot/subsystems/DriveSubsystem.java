@@ -18,13 +18,11 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.ModuleConstants;
 
 public class DriveSubsystem extends SubsystemBase {
   // Robot swerve modules
@@ -59,14 +57,6 @@ public class DriveSubsystem extends SubsystemBase {
   // The gyro sensor
   private final AHRS m_gyro = new AHRS(NavXComType.kMXP_SPI);
 
-  double dp = ModuleConstants.kPModuleDriveController;
-  double di = ModuleConstants.kIModuleDriveController;
-  double dd = ModuleConstants.kDModuleDriveController;
-
-  double tp = ModuleConstants.kPModuleTurningController;
-  double ti = ModuleConstants.kIModuleTurningController;
-  double td = ModuleConstants.kDModuleTurningController;
-
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry =
       new SwerveDriveOdometry(
@@ -90,14 +80,6 @@ public class DriveSubsystem extends SubsystemBase {
       e.printStackTrace();
       ppconfig = null;
     }
-
-    SmartDashboard.putNumber("Drive P: ", dp);
-    SmartDashboard.putNumber("Drive I: ", di);
-    SmartDashboard.putNumber("Drive D: ", dd);
-
-    SmartDashboard.putNumber("Turn P: ", tp);
-    SmartDashboard.putNumber("Turn I: ", ti);
-    SmartDashboard.putNumber("Turn D: ", td);
 
     AutoBuilder.configure(this::getPose, this::resetOdometry, this::getRobotRelativeSpeeds, 
     (speeds, ff)->drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, false), 
@@ -136,9 +118,9 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearRight.getPosition()
         });
 
-        SmartDashboard.putNumber("Gyro: ", m_gyro.getAngle());
-        SmartDashboard.putNumber("X: ", getPose().getX());
-        SmartDashboard.putNumber("Y: ", getPose().getY());
+        //SmartDashboard.putNumber("Gyro: ", m_gyro.getAngle());
+        //SmartDashboard.putNumber("X: ", getPose().getX());
+        //SmartDashboard.putNumber("Y: ", getPose().getY());
   }
 
   /**

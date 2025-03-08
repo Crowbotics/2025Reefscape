@@ -94,27 +94,27 @@ public final class Constants {
     public static final int kArmPort1 = 9;
     public static final int kArmPort2 = 10;
 
-    public static final double kGroundFront = 0.15;
+    public static final double kGroundFront = 0.185;
     public static final double kL1Front     = 0.325;
-    public static final double kL2Front     = 0.4;
+    public static final double kL2Front     = 0.38;
     public static final double kStraightUp  = 0.50;
-    public static final double kL2Rear      = 0.6;
+    public static final double kL2Rear      = 0.62;
     public static final double kL1Rear      = 0.675;
-    public static final double kGroundRear  = 0.85;
+    public static final double kGroundRear  = 0.805;
 
-    public static final double kBeginClimb  = 0.25;
+    public static final double kBeginClimb  = 0.35;
     public static final double kEndClimb    = 0.25;
 
     public static final double kP = 10;
     public static final double kI = 0;
     public static final double kD = 0;
-    public static final double kMaxOutput = 0.3;
-    public static final double kMinOutput = -0.3;
+    public static final double kMaxOutput = 0.5;
+    public static final double kMinOutput = -0.5;
 
     //Feedforward Constants
-    public static final double kS = 0.0;
-    public static final double kG = 0.0;
-    public static final double kV = 0.0;
+    public static final double kS = 0.05;
+    public static final double kG = 0.05;
+    public static final double kV = 0.05;
   }
 
   public static final class ClawConstants {
@@ -130,10 +130,10 @@ public final class Constants {
     public static final int kCoralSensor3 = 3;
 
     public static final double kCollectorSpeed = 1;
-    public static final double kReverseCollectorSpeed = -0.5;
+    public static final double kReverseCollectorSpeed = -0.20;
 
-    public static final double kManipulatorSpeed = 0.1; // 0 - 1
-    public static final double kCenteringSpeed = 0.25;
+    public static final double kManipulatorSpeed = 0.3; // 0 - 1
+    public static final double kCenteringSpeed = 0.8;
   }
 
   public static final class ClimberConstants {

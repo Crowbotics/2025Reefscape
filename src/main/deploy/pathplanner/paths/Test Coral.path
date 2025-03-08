@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.271,
-        "y": 6.992
+        "x": 7.3,
+        "y": 2.2
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.270999999999999,
-        "y": 6.992
+        "x": 6.338738304061681,
+        "y": 2.4756373558169993
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.015881147540983,
-        "y": 5.121875
+        "x": 5.15,
+        "y": 2.9
       },
       "prevControl": {
-        "x": 3.0158811475409832,
-        "y": 5.121875
+        "x": 5.424063637292781,
+        "y": 2.77797900707726
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,22 +33,22 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 1.5,
+    "maxAcceleration": 1.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
-    "unlimited": true
+    "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 120.20231420585694
+    "rotation": 119.99999999999999
   },
   "reversed": false,
-  "folder": "Kylers Paths",
+  "folder": "Simple Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 127.54404538830033
+    "rotation": 180.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
