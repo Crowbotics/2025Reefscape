@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.338738304061681,
-        "y": 5.524362644183
+        "x": 7.05,
+        "y": 5.8
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Left Start Cage 2"
     },
     {
       "anchor": {
-        "x": 5.15,
-        "y": 5.1
+        "x": 5.34,
+        "y": 5.59
       },
       "prevControl": {
-        "x": 5.424063637292781,
-        "y": 5.222020992922739
+        "x": 6.279692620785908,
+        "y": 5.932020143325669
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Top Right Reef"
     }
   ],
   "rotationTargets": [],
