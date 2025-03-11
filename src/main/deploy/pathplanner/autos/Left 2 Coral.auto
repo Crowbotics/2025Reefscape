@@ -17,22 +17,9 @@
           }
         },
         {
-          "type": "race",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "moveArm"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Left 2 Coral Pt.1"
-                }
-              }
-            ]
+            "pathName": "Left 2 Coral Pt.1"
           }
         },
         {
@@ -67,22 +54,9 @@
           }
         },
         {
-          "type": "race",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "moveArm"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Left 2 Coral Pt.2"
-                }
-              }
-            ]
+            "pathName": "Left 2 Coral Pt.2"
           }
         },
         {
@@ -123,22 +97,9 @@
           }
         },
         {
-          "type": "race",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "moveArm"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Left 2 Coral Pt.3"
-                }
-              }
-            ]
+            "pathName": "Left 2 Coral Pt.3"
           }
         },
         {

@@ -62,7 +62,7 @@ public class RobotContainer {
 
     SmartDashboard.putData("Auto Chooser", m_chooser);
     // Configure default commands
-    m_arm.setDefaultCommand(m_arm.moveArmCommand());
+    //m_arm.setDefaultCommand(m_arm.moveArmCommand());
     m_climber.setDefaultCommand(m_climber.moveWinchCommand());
 
     m_robotDrive.setDefaultCommand(

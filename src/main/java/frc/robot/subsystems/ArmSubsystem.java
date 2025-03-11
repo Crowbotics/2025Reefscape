@@ -109,6 +109,7 @@ public class ArmSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("Arm Position: ", getArmPosition());
         SmartDashboard.putNumber("Desired Arm Position: ", m_state.position);
         SmartDashboard.putString("Arm State: ", m_state.toString());
+        this.setArmReference();
     }
 
     public Command moveArmCommand(){
