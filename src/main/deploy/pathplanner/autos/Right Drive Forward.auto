@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Drive Forward"
+            "pathName": null
           }
         }
       ]
