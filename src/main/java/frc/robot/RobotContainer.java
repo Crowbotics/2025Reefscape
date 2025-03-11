@@ -116,7 +116,7 @@ public class RobotContainer {
     //Claw Buttons
     new Trigger(driverRightTrigger.whileTrue(m_claw.intakeCommand()));
     new Trigger(driverLeftTrigger.whileTrue(m_claw.reverseIntakeCommand()).onFalse(m_claw.retractPuncherCommand()));
-    //new Trigger(driverPOVR.whileTrue(m_claw.reverseIntakeCommand()).onFalse(m_claw.retractPuncherCommand()));
+    new Trigger(driverPOVR.whileTrue(m_claw.reverseIntakeCommand()).onFalse(m_claw.retractPuncherCommand()));
     new Trigger(driverPOVL.whileTrue(m_claw.scoreLeftCommand()));
     new Trigger(driverPOVU.whileTrue(m_claw.scoreRightCommand()));
 

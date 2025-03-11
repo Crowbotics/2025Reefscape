@@ -1,0 +1,188 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.3,
+        "y": 4.0
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.873990366094233,
+        "y": 4.1867164231980345
+      },
+      "isLocked": false,
+      "linkedName": "Middle Start"
+    },
+    {
+      "anchor": {
+        "x": 5.24,
+        "y": 5.35
+      },
+      "prevControl": {
+        "x": 5.799683615371865,
+        "y": 5.186754389844897
+      },
+      "nextControl": {
+        "x": 4.738853419099728,
+        "y": 5.496171831958762
+      },
+      "isLocked": false,
+      "linkedName": "Top Right Reef"
+    },
+    {
+      "anchor": {
+        "x": 1.24,
+        "y": 6.87
+      },
+      "prevControl": {
+        "x": 1.533935278800731,
+        "y": 7.3495950429505115
+      },
+      "nextControl": {
+        "x": 1.027103734968,
+        "y": 6.522631035687127
+      },
+      "isLocked": false,
+      "linkedName": "Left Coral Station "
+    },
+    {
+      "anchor": {
+        "x": 3.72,
+        "y": 5.35
+      },
+      "prevControl": {
+        "x": 3.419909641382668,
+        "y": 5.026968581594751
+      },
+      "nextControl": {
+        "x": 4.001283044336001,
+        "y": 5.652786338101156
+      },
+      "isLocked": false,
+      "linkedName": "Top Left Reef"
+    },
+    {
+      "anchor": {
+        "x": 1.24,
+        "y": 6.87
+      },
+      "prevControl": {
+        "x": 1.363959443753216,
+        "y": 7.307151078530295
+      },
+      "nextControl": {
+        "x": 1.1717984422749548,
+        "y": 6.629482750049238
+      },
+      "isLocked": false,
+      "linkedName": "Left Coral Station "
+    },
+    {
+      "anchor": {
+        "x": 2.96,
+        "y": 4.04
+      },
+      "prevControl": {
+        "x": 2.43643921566033,
+        "y": 5.419716893904715
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Middle Left Reef"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": -119.99999999999999
+    },
+    {
+      "waypointRelativePos": 2,
+      "rotationDegrees": 126.0
+    },
+    {
+      "waypointRelativePos": 3,
+      "rotationDegrees": -59.99999999999999
+    },
+    {
+      "waypointRelativePos": 4,
+      "rotationDegrees": 126.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.8,
+      "maxWaypointRelativePos": 1.2,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 0.5,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    },
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 1.8,
+      "maxWaypointRelativePos": 2.2,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 0.5,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    },
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 2.8,
+      "maxWaypointRelativePos": 3.2,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 0.5,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    },
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 3.8,
+      "maxWaypointRelativePos": 4.2,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 0.5,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "Lofty",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

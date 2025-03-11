@@ -61,8 +61,8 @@ public class ArmSubsystem extends SubsystemBase{
             //Sets up how we iterate through arm states
             GROUND_FRONT.up = L1_FRONT; GROUND_FRONT.down = GROUND_FRONT;
             L1_FRONT.up =     L2_FRONT; L1_FRONT.down =     GROUND_FRONT;
-            L2_FRONT.up =     /*L2_REAR*/ STRAIGHT_UP;  L2_FRONT.down =     L1_FRONT;
-            STRAIGHT_UP.up =  /*L2_REAR*/ STRAIGHT_UP;  STRAIGHT_UP.down = L2_FRONT;
+            L2_FRONT.up =     L2_REAR /*STRAIGHT_UP*/;  L2_FRONT.down =     L1_FRONT;
+            STRAIGHT_UP.up =  L2_REAR /*STRAIGHT_UP*/;  STRAIGHT_UP.down = L2_FRONT;
 
             L2_REAR.up =      L2_FRONT; L2_REAR.down =      L1_REAR;
             L1_REAR.up =      L2_REAR;  L1_REAR.down =      GROUND_REAR;

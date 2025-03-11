@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 5.15,
-        "y": 2.9
+        "x": 5.24,
+        "y": 2.72
       },
       "prevControl": {
-        "x": 5.424063637292781,
-        "y": 2.77797900707726
+        "x": 5.5140636372927805,
+        "y": 2.59797900707726
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Bottom Right Reef"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": 126.0
   },
   "reversed": false,
   "folder": "Simple Paths",

@@ -94,13 +94,13 @@ public final class Constants {
     public static final int kArmPort1 = 9;
     public static final int kArmPort2 = 10;
 
-    public static final double kGroundFront = 0.185;
-    public static final double kL1Front     = 0.325;
+    public static final double kGroundFront = 0.1825;
+    public static final double kL1Front     = 0.310;
     public static final double kL2Front     = 0.38;
     public static final double kStraightUp  = 0.50;
     public static final double kL2Rear      = 0.62;
     public static final double kL1Rear      = 0.675;
-    public static final double kGroundRear  = 0.805;
+    public static final double kGroundRear  = 0.8075;
 
     public static final double kBeginClimb  = 0.35;
     public static final double kEndClimb    = 0.25;
