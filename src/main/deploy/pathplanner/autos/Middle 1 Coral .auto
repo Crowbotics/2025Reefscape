@@ -17,18 +17,25 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
+          "data": {
+            "pathName": "Middle 1 Coral"
+          }
+        },
+        {
+          "type": "race",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "moveArm"
+                  "name": "outake"
                 }
               },
               {
-                "type": "sequential",
+                "type": "wait",
                 "data": {
+<<<<<<< HEAD
                   "commands": [
                     {
                       "type": "path",
@@ -75,6 +82,9 @@
                       }
                     }
                   ]
+=======
+                  "waitTime": 1.5
+>>>>>>> 064d2bf048ce3df1a990aca7babbb96e68b068fd
                 }
               }
             ]
