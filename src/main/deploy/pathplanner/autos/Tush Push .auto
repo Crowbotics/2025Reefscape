@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "Tush Push Pt.1"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "moveArmStateDown"
@@ -19,7 +25,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Middle 1 Coral"
+            "pathName": "Tush Push Pt.2"
           }
         },
         {
@@ -39,12 +45,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Middle 1 Go Back"
           }
         }
       ]
