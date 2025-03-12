@@ -170,6 +170,10 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return m_chooser.getSelected();
   }
+
+  public void offsetHeading() {
+    m_robotDrive.setAdjustmentAngle(180);
+  }
 }
 
 

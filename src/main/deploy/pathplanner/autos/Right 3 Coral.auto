@@ -38,13 +38,13 @@
         {
           "type": "named",
           "data": {
-            "name": "moveArmStateUp"
+            "name": "stopOutake"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "moveArmStateUp"
           }
         },
         {
