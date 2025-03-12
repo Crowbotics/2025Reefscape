@@ -218,6 +218,10 @@ public class DriveSubsystem extends SubsystemBase {
     return Commands.runOnce(this::resetPose, this);
   }
 
+  public void setAdjustmentAngle(double adjustmentAngle) {
+    m_gyro.setAngleAdjustment(adjustmentAngle);
+  }
+
   /**
    * Returns the heading of the robot.
    *

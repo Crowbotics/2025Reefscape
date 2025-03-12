@@ -38,13 +38,13 @@
         {
           "type": "named",
           "data": {
-            "name": "moveArmStateUp"
+            "name": "stopOutake"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "moveArmStateUp"
           }
         },
         {
@@ -54,9 +54,34 @@
           }
         },
         {
-          "type": "wait",
+          "type": "race",
           "data": {
-            "waitTime": 1.0
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "moveArmStateUp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "moveArmStateUp"
           }
         },
         {
@@ -66,9 +91,28 @@
           }
         },
         {
-          "type": "wait",
+          "type": "race",
           "data": {
-            "waitTime": 0.5
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "outake"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.5
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopOutake"
           }
         },
         {
@@ -78,15 +122,77 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 1.0
+            "name": "moveArmStateDown"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "moveArmStateDown"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.0
+                }
+              }
+            ]
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "Right 3 Coral Pt.5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "moveArmStateUp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "moveArmStateUp"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "outake"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.5
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopOutake"
           }
         }
       ]
