@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.65,
-        "y": 5.0
+        "x": 3.72,
+        "y": 5.35
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2404610688211375,
-        "y": 5.513030214988504
+        "x": 2.3104610688211378,
+        "y": 5.863030214988504
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Top Left Reef"
     },
     {
       "anchor": {
-        "x": 1.1,
-        "y": 6.95
+        "x": 1.24,
+        "y": 6.87
       },
       "prevControl": {
-        "x": 1.7427876096865398,
-        "y": 6.183955556881022
+        "x": 1.8827876096865397,
+        "y": 6.103955556881022
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Left Coral Station "
     }
   ],
   "rotationTargets": [],

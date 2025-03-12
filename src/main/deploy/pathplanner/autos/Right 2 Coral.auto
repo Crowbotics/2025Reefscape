@@ -5,9 +5,52 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "moveArmStateDown"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "moveArmStateDown"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Right 2 Coral Pt.1"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "outake"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.5
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopOutake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "moveArmStateUp"
           }
         },
         {
@@ -17,9 +60,71 @@
           }
         },
         {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "moveArmStateUp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "moveArmStateUp"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Right 2 Coral Pt.3"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "outake"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.5
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopOutake"
           }
         }
       ]
