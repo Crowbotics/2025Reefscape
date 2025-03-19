@@ -42,6 +42,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "stopOutake"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Middle 1 Go Back"
@@ -51,6 +57,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Simple Autos",
+  "folder": "Main Autos",
   "choreoAuto": false
 }

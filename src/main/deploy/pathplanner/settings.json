@@ -4,11 +4,10 @@
   "holonomicMode": true,
   "pathFolders": [
     "Lofty",
-    "Simple Paths"
+    "Main Paths"
   ],
   "autoFolders": [
-    "New Folder",
-    "Simple Autos"
+    "Main Autos"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,

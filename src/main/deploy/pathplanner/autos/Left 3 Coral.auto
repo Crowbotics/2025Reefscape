@@ -5,83 +5,34 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "moveArmStateDown"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Left 3 Coral Pt.1"
           }
         },
         {
-          "type": "race",
+          "type": "named",
+          "data": {
+            "name": "outake"
+          }
+        },
+        {
+          "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "outake"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 1.5
+                  "name": "stopOutake"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stopOutake"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "moveArmStateUp"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Left 2 Coral Pt.2"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "intake"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 2.0
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "moveArmStateUp"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "moveArmStateUp"
+            "pathName": "Left 3 Coral Pt.2"
           }
         },
         {
@@ -91,65 +42,9 @@
           }
         },
         {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "outake"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 1.5
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stopOutake"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Left 3 Coral Pt.4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "moveArmStateDown"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "moveArmStateDown"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "intake"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 2.0
-                }
-              }
-            ]
           }
         },
         {
@@ -157,48 +52,11 @@
           "data": {
             "pathName": "Left 3 Coral Pt.5"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "moveArmStateUp"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "moveArmStateUp"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "outake"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 1.5
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stopOutake"
-          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Simple Autos",
+  "folder": "Main Autos",
   "choreoAuto": false
 }

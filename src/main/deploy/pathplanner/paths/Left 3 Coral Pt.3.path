@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0060444431189772,
-        "y": 6.227212390313461
+        "x": 1.8026800655010262,
+        "y": 6.519614097901914
       },
       "isLocked": false,
       "linkedName": "Left Coral Station "
@@ -20,8 +20,8 @@
         "y": 5.35
       },
       "prevControl": {
-        "x": 2.81369221296335,
-        "y": 5.772618261740699
+        "x": 2.884459122521822,
+        "y": 5.873915860648744
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.5,
-    "maxAcceleration": 1.5,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -45,7 +45,7 @@
     "rotation": 119.99999999999999
   },
   "reversed": false,
-  "folder": "Simple Paths",
+  "folder": "Main Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 126.0

@@ -16,9 +16,11 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ArmSubsystem.ArmState;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -54,9 +56,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("moveArm", m_arm.moveArmCommand());
     NamedCommands.registerCommand("moveArmStateUp", m_arm.moveArmUpCommand());
     NamedCommands.registerCommand("moveArmStateDown", m_arm.moveArmDownCommand());
-    NamedCommands.registerCommand("intake", m_claw.intakeCommand());
+    NamedCommands.registerCommand("intake", m_claw.intakeCommand().raceWith(new WaitCommand(2)));
     NamedCommands.registerCommand("stopIntake", m_claw.stopIntakeCommand());
-    NamedCommands.registerCommand("outake", m_claw.reverseIntakeCommand().andThen(m_claw.retractPuncherCommand()));
+    NamedCommands.registerCommand("outake", m_claw.reverseIntakeCommand().raceWith(new WaitCommand(1.5)));
     NamedCommands.registerCommand("stopOutake", m_claw.retractPuncherCommand());
     m_chooser = AutoBuilder.buildAutoChooser();
 
@@ -87,6 +89,14 @@ public class RobotContainer {
     configureButtonBindings();
   }
 
+  private boolean shouldRemoveAlgae() {
+    if (m_arm.getArmState() == ArmState.ALGAE_FRONT || m_arm.getArmState() == ArmState.ALGAE_FRONT) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its subclasses ({@link
@@ -115,15 +125,18 @@ public class RobotContainer {
 
     //Claw Buttons
     new Trigger(driverRightTrigger.whileTrue(m_claw.intakeCommand()));
-    new Trigger(driverLeftTrigger.whileTrue(m_claw.reverseIntakeCommand()).onFalse(m_claw.retractPuncherCommand()));
-    new Trigger(driverPOVR.whileTrue(m_claw.reverseIntakeCommand()).onFalse(m_claw.retractPuncherCommand()));
+    new Trigger(driverLeftTrigger.and(() -> !shouldRemoveAlgae()).whileTrue(m_claw.reverseIntakeCommand()).onFalse(m_claw.retractPuncherCommand()));
+    new Trigger(driverPOVR.and(() -> !shouldRemoveAlgae()).whileTrue(m_claw.reverseIntakeCommand()).onFalse(m_claw.retractPuncherCommand()));
     new Trigger(driverPOVL.whileTrue(m_claw.scoreLeftCommand()));
     new Trigger(driverPOVU.whileTrue(m_claw.scoreRightCommand()));
-
+    new Trigger(driverLeftTrigger.and(() -> shouldRemoveAlgae())).whileTrue(m_claw.removeAlgaeCommand());
+    new Trigger(driverPOVR.and(() -> shouldRemoveAlgae())).whileTrue(m_claw.removeAlgaeCommand());
+    
     //Arm Buttons
     new Trigger(driverRightBumper.onTrue(m_arm.moveArmUpCommand()));
     new Trigger(driverLeftBumper.onTrue(m_arm.moveArmDownCommand()));
     new Trigger(driverY.onTrue(m_arm.moveArmStraightUpCommand()));
+    new Trigger(driverB.onTrue(m_arm.moveArmAlgaeCommand()));
 
     //Climber Buttons
     new Trigger(driverSelect.onTrue(
@@ -149,9 +162,9 @@ public class RobotContainer {
                 // This will map the [-1, 1] to [max speed backwards, max speed forwards],
                 // converting them to actual units.
                 slewX.calculate(-MathUtil.applyDeadband(m_driverController.getRawAxis(1), 0.075) 
-                    * DriveConstants.kMaxSpeedMetersPerSecond/3.0),
+                    * DriveConstants.kMaxSpeedMetersPerSecond/3.5),
                 slewY.calculate(-MathUtil.applyDeadband(m_driverController.getRawAxis(0), 0.075) 
-                    * DriveConstants.kMaxSpeedMetersPerSecond/3.0),
+                    * DriveConstants.kMaxSpeedMetersPerSecond/3.5),
                 -MathUtil.applyDeadband(m_driverController.getRawAxis(4), 0.075)
                     * DriveConstants.kMaxSpeedMetersPerSecond,
                 true),
@@ -174,6 +187,11 @@ public class RobotContainer {
   public void offsetHeading() {
     m_robotDrive.setAdjustmentAngle(180);
   }
+
+  public void onInit() {
+    m_arm.setArmStateStraightUp();
+  }
+
 }
 
 

@@ -95,12 +95,15 @@ public final class Constants {
     public static final int kArmPort2 = 10;
 
     public static final double kGroundFront = 0.1825;
-    public static final double kL1Front     = 0.310;
+    public static final double kL1Front     = 0.31;
     public static final double kL2Front     = 0.38;
     public static final double kStraightUp  = 0.50;
     public static final double kL2Rear      = 0.62;
     public static final double kL1Rear      = 0.675;
-    public static final double kGroundRear  = 0.8350;
+    public static final double kGroundRear  = 0.8400;
+
+    public static final double kAlgaeFront  = 0.34;
+    public static final double kAlgaeBack   = 0.76;
 
     public static final double kBeginClimb  = 0.35;
     public static final double kEndClimb    = 0.25;
@@ -131,6 +134,7 @@ public final class Constants {
 
     public static final double kCollectorSpeed = 1;
     public static final double kReverseCollectorSpeed = -0.20;
+    public static final double kAlgaeRemovalSpeed = -0.6;
 
     public static final double kManipulatorSpeed = 0.3; // 0 - 1
     public static final double kCenteringSpeed = 0.8;
@@ -139,7 +143,7 @@ public final class Constants {
   public static final class ClimberConstants {
     public static final int kWinchPort = 16;
 
-    public static final double kWinchSpeed = 0.3;
+    public static final double kWinchSpeed = 0.6;
 
     public static final double kWinchOut = -120.0;
     public static final double kWinchIn = -0.0;
@@ -147,7 +151,7 @@ public final class Constants {
     public static final double kP = 5.0;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
-    public static final double kMaxOutput = 0.5;
-    public static final double kMinOutput = -0.5;
+    public static final double kMaxOutput = 1;
+    public static final double kMinOutput = -1;
   }
 }

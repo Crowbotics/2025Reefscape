@@ -46,7 +46,9 @@ public class ArmSubsystem extends SubsystemBase{
         L1_REAR         (ArmConstants.kL1Rear),
         GROUND_REAR     (ArmConstants.kGroundRear),
         BEGIN_CLIMB     (ArmConstants.kBeginClimb),
-        END_CLIMB       (ArmConstants.kEndClimb);
+        END_CLIMB       (ArmConstants.kEndClimb),
+        ALGAE_FRONT     (ArmConstants.kAlgaeFront),
+        AlGAE_BACK      (ArmConstants.kAlgaeBack);
 
         public final double position;
         public ArmState up;
@@ -67,6 +69,9 @@ public class ArmSubsystem extends SubsystemBase{
             L2_REAR.up =      L2_FRONT; L2_REAR.down =      L1_REAR;
             L1_REAR.up =      L2_REAR;  L1_REAR.down =      GROUND_REAR;
             GROUND_REAR.up =  L1_REAR;  GROUND_REAR.down =  GROUND_REAR;
+
+            ALGAE_FRONT.up =    L2_FRONT; ALGAE_FRONT.down =    L1_FRONT;
+            AlGAE_BACK.up =     L1_REAR; AlGAE_BACK.down =      L2_REAR;
 
             //Climb states do not cycle
             BEGIN_CLIMB.up = BEGIN_CLIMB; BEGIN_CLIMB.down = BEGIN_CLIMB;
@@ -136,6 +141,20 @@ public class ArmSubsystem extends SubsystemBase{
         return Commands.runOnce(this::setArmStateEndClimb);
     }
 
+    public Command moveArmAlgaeCommand() {
+        return Commands.runOnce(() -> {
+            if (m_state.position <= 0.5) {
+                m_state = ArmState.ALGAE_FRONT;
+            } else {
+                m_state = ArmState.AlGAE_BACK;
+            }
+        });
+    }
+
+    public ArmState getArmState() {
+        return m_state;
+    }
+
     private void setArmReference(){
         feedforward = ff.calculate(m_state.position * Math.PI * 2.0 - Math.PI/2.0, velocity);
 
@@ -168,7 +187,7 @@ public class ArmSubsystem extends SubsystemBase{
         m_state = ArmState.END_CLIMB;
     }
 
-    private void setArmStateStraightUp()
+    public void setArmStateStraightUp()
     {
         m_state = ArmState.STRAIGHT_UP;
     }

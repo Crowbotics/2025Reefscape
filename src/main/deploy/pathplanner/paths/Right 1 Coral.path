@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.3,
-        "y": 2.2
+        "x": 7.27,
+        "y": 1.85
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.338738304061681,
-        "y": 2.4756373558169993
+        "x": 6.308738304061681,
+        "y": 2.1256373558169983
       },
       "isLocked": false,
       "linkedName": "Right Start Cage 2"
@@ -45,7 +45,7 @@
     "rotation": 119.99999999999999
   },
   "reversed": false,
-  "folder": "Simple Paths",
+  "folder": "Main Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

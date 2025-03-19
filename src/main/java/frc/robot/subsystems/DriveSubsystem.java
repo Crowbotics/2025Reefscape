@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveSubsystem extends SubsystemBase {
   // Robot swerve modules
@@ -118,7 +119,7 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearRight.getPosition()
         });
 
-        //SmartDashboard.putNumber("Gyro: ", m_gyro.getAngle());
+        SmartDashboard.putNumber("Gyro: ", m_gyro.getAngle());
         //SmartDashboard.putNumber("X: ", getPose().getX());
         //SmartDashboard.putNumber("Y: ", getPose().getY());
   }

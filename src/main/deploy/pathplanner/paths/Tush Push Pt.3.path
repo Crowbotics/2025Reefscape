@@ -3,41 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0,
-        "y": 7.0
+        "x": 6.0,
+        "y": 4.04
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.4095389311788624,
-        "y": 7.513030214988504
+        "x": 6.25,
+        "y": 4.04
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Middle Right Reef"
     },
     {
       "anchor": {
-        "x": 4.5,
-        "y": 7.0
+        "x": 6.5,
+        "y": 4.04
       },
       "prevControl": {
-        "x": 4.5,
-        "y": 7.25
-      },
-      "nextControl": {
-        "x": 4.5,
-        "y": 6.75
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.0,
-        "y": 7.0
-      },
-      "prevControl": {
-        "x": 3.4095389311788624,
-        "y": 6.486969785011496
+        "x": 6.25,
+        "y": 4.04
       },
       "nextControl": null,
       "isLocked": false,
@@ -49,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 1.5,
     "maxAcceleration": 1.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -61,10 +45,10 @@
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Main Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": false
 }

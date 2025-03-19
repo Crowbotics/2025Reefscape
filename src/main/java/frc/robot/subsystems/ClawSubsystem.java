@@ -191,7 +191,11 @@ public class ClawSubsystem extends SubsystemBase{
     public Command reverseIntakeCommand() {
         return new StartEndCommand(
             () -> setCollectorMotors(ClawConstants.kReverseCollectorSpeed, ClawConstants.kReverseCollectorSpeed, true),
-            () -> setCollectorMotors(0, 0, false),
+            () -> {
+                setCollectorMotors(0, 0, false);
+                puncherTimer.reset();
+                puncherTimer.start();
+            },
             this);
     }
 
@@ -215,8 +219,6 @@ public class ClawSubsystem extends SubsystemBase{
         m_bottomCollector.set(bottom);
         if(scoring){
             m_puncher.set(0.6);
-            puncherTimer.reset();
-            puncherTimer.start();
         }
     }
 
@@ -228,6 +230,13 @@ public class ClawSubsystem extends SubsystemBase{
             run(() -> m_puncher.set(-0.8)))
                 .until(this::isPuncherRetracted)
                 .andThen(() -> m_puncher.set(0.0))).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+    }
+
+    public Command removeAlgaeCommand() {
+        return new StartEndCommand(
+            () -> setCollectorMotors(ClawConstants.kAlgaeRemovalSpeed, ClawConstants.kAlgaeRemovalSpeed, false),
+            () -> setCollectorMotors(0, 0, false),
+            this);
     }
 
     private boolean isPuncherRetracted()

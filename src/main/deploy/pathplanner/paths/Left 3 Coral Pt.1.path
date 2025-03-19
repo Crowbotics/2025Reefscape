@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.308738304061681,
-        "y": 5.874362644183001
+        "x": 6.322931592679748,
+        "y": 5.810752794596601
       },
       "isLocked": false,
       "linkedName": "Left Start Cage 2"
@@ -20,8 +20,8 @@
         "y": 5.35
       },
       "prevControl": {
-        "x": 5.52406363729278,
-        "y": 5.472020992922739
+        "x": 5.47489490204745,
+        "y": 5.459189207493543
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.5,
-    "maxAcceleration": 1.5,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -45,7 +45,7 @@
     "rotation": -119.99999999999999
   },
   "reversed": false,
-  "folder": "Simple Paths",
+  "folder": "Main Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

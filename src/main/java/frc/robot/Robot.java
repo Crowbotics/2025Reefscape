@@ -56,6 +56,8 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
+    m_robotContainer.onInit();
+
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
      * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
@@ -82,7 +84,13 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    // Since our autos start facing the driver,
+    // we rotate the heading 180 degrees at the start of teleop
+    // so the driver doesn't have to manually change it
     m_robotContainer.offsetHeading();
+
+    m_robotContainer.onInit();
   }
 
   /** This function is called periodically during operator control. */

@@ -40,11 +40,17 @@
               }
             ]
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopOutake"
+          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Simple Autos",
+  "folder": "Main Autos",
   "choreoAuto": false
 }

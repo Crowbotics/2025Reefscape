@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.006044443118978,
-        "y": 1.862787609686539
+        "x": 2.1060254037844386,
+        "y": 1.7199999999999998
       },
       "isLocked": false,
       "linkedName": "Right Coral Station "
@@ -20,8 +20,8 @@
         "y": 2.72
       },
       "prevControl": {
-        "x": 2.81369221296335,
-        "y": 2.2973817382593005
+        "x": 2.8539745962155614,
+        "y": 2.22
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
     "rotation": -119.99999999999999
   },
   "reversed": false,
-  "folder": "Simple Paths",
+  "folder": "Main Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -126.0
