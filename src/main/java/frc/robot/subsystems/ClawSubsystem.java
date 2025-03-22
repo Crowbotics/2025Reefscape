@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -183,7 +184,7 @@ public class ClawSubsystem extends SubsystemBase{
     }
 
     public Command stopIntakeCommand() {
-        return new RunCommand(() -> {
+        return new InstantCommand(() -> {
             setCollectorMotors(0, 0, false);
         }, this);
     }
@@ -218,7 +219,7 @@ public class ClawSubsystem extends SubsystemBase{
         m_topCollector.set(top);
         m_bottomCollector.set(bottom);
         if(scoring){
-            m_puncher.set(0.6);
+            m_puncher.set(ClawConstants.kPuncherOutSpeed);
         }
     }
 
@@ -227,7 +228,7 @@ public class ClawSubsystem extends SubsystemBase{
         return new SequentialCommandGroup(
             runOnce(()-> puncherTimer.reset()).andThen(
             runOnce(()-> puncherTimer.start())).andThen(
-            run(() -> m_puncher.set(-0.8)))
+            run(() -> m_puncher.set(ClawConstants.kPuncherRetractSpeed)))
                 .until(this::isPuncherRetracted)
                 .andThen(() -> m_puncher.set(0.0))).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
     }

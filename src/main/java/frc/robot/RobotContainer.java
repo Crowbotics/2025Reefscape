@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.ClawConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.ArmSubsystem;
@@ -56,9 +57,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("moveArm", m_arm.moveArmCommand());
     NamedCommands.registerCommand("moveArmStateUp", m_arm.moveArmUpCommand());
     NamedCommands.registerCommand("moveArmStateDown", m_arm.moveArmDownCommand());
-    NamedCommands.registerCommand("intake", m_claw.intakeCommand().raceWith(new WaitCommand(2)));
+    NamedCommands.registerCommand("intake", m_claw.intakeCommand().raceWith(new WaitCommand(ClawConstants.kAutoIntakeDuration)));
     NamedCommands.registerCommand("stopIntake", m_claw.stopIntakeCommand());
-    NamedCommands.registerCommand("outake", m_claw.reverseIntakeCommand().raceWith(new WaitCommand(1.5)));
+    NamedCommands.registerCommand("outake", m_claw.reverseIntakeCommand().raceWith(new WaitCommand(ClawConstants.kAutoOutakeDuration)).andThen(m_claw.retractPuncherCommand()));
     NamedCommands.registerCommand("stopOutake", m_claw.retractPuncherCommand());
     m_chooser = AutoBuilder.buildAutoChooser();
 
@@ -77,9 +78,9 @@ public class RobotContainer {
                     // This will map the [-1, 1] to [max speed backwards, max speed forwards],
                     // converting them to actual units.
                     slewX.calculate(-MathUtil.applyDeadband(m_driverController.getRawAxis(1), 0.075) 
-                        * DriveConstants.kMaxSpeedMetersPerSecond),
+                        * DriveConstants.kSlowSpeedMetersPerSecond),
                     slewY.calculate(-MathUtil.applyDeadband(m_driverController.getRawAxis(0), 0.075) 
-                        * DriveConstants.kMaxSpeedMetersPerSecond),
+                        * DriveConstants.kSlowSpeedMetersPerSecond),
                     -MathUtil.applyDeadband(m_driverController.getRawAxis(4), 0.075)
                         * DriveConstants.kMaxSpeedMetersPerSecond*1.6,
                     true),
@@ -162,9 +163,9 @@ public class RobotContainer {
                 // This will map the [-1, 1] to [max speed backwards, max speed forwards],
                 // converting them to actual units.
                 slewX.calculate(-MathUtil.applyDeadband(m_driverController.getRawAxis(1), 0.075) 
-                    * DriveConstants.kMaxSpeedMetersPerSecond/3.5),
+                    * DriveConstants.kMaxSpeedMetersPerSecond),
                 slewY.calculate(-MathUtil.applyDeadband(m_driverController.getRawAxis(0), 0.075) 
-                    * DriveConstants.kMaxSpeedMetersPerSecond/3.5),
+                    * DriveConstants.kMaxSpeedMetersPerSecond),
                 -MathUtil.applyDeadband(m_driverController.getRawAxis(4), 0.075)
                     * DriveConstants.kMaxSpeedMetersPerSecond,
                 true),

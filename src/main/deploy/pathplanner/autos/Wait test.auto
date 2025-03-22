@@ -7,13 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "wait test"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 15.0
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Main Autos",
   "choreoAuto": false
 }

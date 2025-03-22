@@ -59,6 +59,7 @@ public final class Constants {
     public static final boolean kGyroReversed = false;
 
     public static final double kMaxSpeedMetersPerSecond = 4;
+    public static final double kSlowSpeedMetersPerSecond = 4.0 /3.5;
   }
 
   public static final class ModuleConstants {
@@ -138,6 +139,12 @@ public final class Constants {
 
     public static final double kManipulatorSpeed = 0.3; // 0 - 1
     public static final double kCenteringSpeed = 0.8;
+
+    public static final double kPuncherOutSpeed = 0.6;
+    public static final double kPuncherRetractSpeed = -0.8;
+
+    public static final double kAutoIntakeDuration = 0.75;
+    public static final double kAutoOutakeDuration = 0.75;
   }
 
   public static final class ClimberConstants {

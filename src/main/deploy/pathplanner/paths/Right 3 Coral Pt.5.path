@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.24,
-        "y": 1.22
+        "x": 1.35,
+        "y": 1.32
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.351203820567237,
-        "y": 2.317512510157838
+        "x": 2.4612038205672375,
+        "y": 2.417512510157838
       },
       "isLocked": false,
       "linkedName": "Right Coral Station "
     },
     {
       "anchor": {
-        "x": 2.96,
-        "y": 4.04
+        "x": 3.175,
+        "y": 3.94
       },
       "prevControl": {
-        "x": 2.4133225539165184,
-        "y": 3.1230907656094677
+        "x": 2.6283225539165183,
+        "y": 3.0230907656094677
       },
       "nextControl": null,
       "isLocked": false,
